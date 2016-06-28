@@ -6,12 +6,13 @@ Python Script for automatically changing the Desktop wallpaper to Bing Photo of 
 
 ## Installation
 Clone/download project. Open terminal in the root folder of the project
+
 1. Type in either of the two commands
     * Recommended
       ```shell
       pip install -r requirements.txt
       ```
-    * Or install them individually
+    *  Or install them individually
         ```shell
         sudo apt-get install python-bs4
         ```
@@ -19,6 +20,7 @@ Clone/download project. Open terminal in the root folder of the project
         sudo apt-get install python-lxml
         ```
 2. Then add the script as a startup application. Type in terminal
+
     ```shell
     gnome-session-properties
     ```
@@ -34,7 +36,7 @@ Clone/download project. Open terminal in the root folder of the project
 * [lxml](http://lxml.de/)
 
 ## Author
-Utkarsh Gupta - A beginner experimenting with Python, ignore any code formatting mistakes or so. Improvements to the code awaited.
+Utkarsh Gupta
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).
