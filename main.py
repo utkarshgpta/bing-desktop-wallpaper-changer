@@ -29,10 +29,11 @@ os.chdir(path)
 if not os.path.isfile(ImageName):
 	urllib.urlretrieve(ImageURL, ImageName)
 	gsettings_path = os.system('which gsettings')
-	if os.system("/usr/bin/gsettings set org.gnome.desktop.background picture-uri file:" + path + ImageName ):
+	if not os.system("/usr/bin/gsettings set org.gnome.desktop.background picture-uri file:" + path + ImageName ):
 		os.system('notify-send "'+'Bing Wallpaper updated successfully'+'" "'+ Images[0].copyright.text.encode('utf-8') +'"')
-	else:
-		os.system('notify-send "'+'Failed to change Bing Wallpaper'+'" "'+ "Please check the installation files again" +'"')
+		os._exit(1)
 else:
-	os.system('notify-send "'+'Bing Wallpaper unchanged'+'" "'+ Images[0].copyright.text.encode('utf-8') +'"')
+	os.system('notify-send "'+'Bing Wallpaper unchanged'+'" "'+ Images[0].copyright.text.encode('utf-8') + ' Wallpaper already exists in wallpaper directory!'  +'"')
 	os._exit(1)
+
+os.system('notify-send "'+'Failed to change Bing Wallpaper'+'" "'+ "Please check the installation files again" +'"')
