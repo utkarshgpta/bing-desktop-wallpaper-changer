@@ -1,11 +1,12 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-import os
-import urllib2
-import urllib
-from bs4 import BeautifulSoup
 import getpass
+import os
+import urllib
+import urllib2
+
+from bs4 import BeautifulSoup
 
 # Get BingXML file which contains the URL of the Bing Photo of the day
 # idx = Number days previous the present day. 0 means current day, 1 means yesterday, etc
