@@ -71,7 +71,6 @@ def get_screen_resolution_str():
     # Get appropriate screen resolution
     window = Gtk.Window()
     screen = window.get_screen()
-    monitors = []
     nmons = screen.get_n_monitors()
     if nmons == 1:
     	return r'%sx%s' % (screen.get_width(), screen.get_height())
