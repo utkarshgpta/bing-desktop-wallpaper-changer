@@ -3,10 +3,12 @@
 
 import getpass
 import os
+import re
 import urllib
 import urllib2
 
 from bs4 import BeautifulSoup
+import gtk
 
 # Get BingXML file which contains the URL of the Bing Photo of the day
 # idx = Number days previous the present day. 0 means current day, 1 means yesterday, etc
@@ -19,8 +21,15 @@ BingXML = BeautifulSoup(page, "lxml")
 
 # For extracting complete URL of the image
 Images = BingXML.find_all('image')
-ImageURL = "https://www.bing.com" + Images[0].url.text
-ImageName = Images[0].startdate.text + ".jpg"
+BaseImage = Images[0].url.text
+# Get appropriate screen resolution
+window = gtk.Window()
+screen = window.get_screen()
+screen_size = r'%sx%s' % (gtk.gdk.screen_width(), gtk.gdk.screen_height())
+# Replace image resolution with the correct resolution from your main monitor
+CorrectResolutionImage = re.sub(r'\d+x\d+', screen_size, BaseImage)
+ImageURL = "https://www.bing.com" + CorrectResolutionImage
+ImageName = Images[0].startdate.text+".jpg"
 
 # All the images will be saved in '/home/[user]/Pictures/BingWallpapers/'
 username = getpass.getuser()
