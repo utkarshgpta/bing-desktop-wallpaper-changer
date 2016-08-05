@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import getpass
+import locale
 import os
 import re
 import urllib
@@ -10,12 +11,41 @@ import urllib2
 from bs4 import BeautifulSoup
 import gtk
 
-# Get BingXML file which contains the URL of the Bing Photo of the day
-# idx = Number days previous the present day. 0 means current day, 1 means yesterday, etc
-# n = Number of images previous the day given by idx
-# mkt denotes your location. e.g. en-US means United States. Put in your
-# country code
-BingXML_URL = "http://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=en-US"
+
+def get_valid_bing_markets():
+    """
+    Find valid Bing markets for area auto detection.
+
+    :see: https://msdn.microsoft.com/en-us/library/dd251064.aspx
+    :return: List with valid Bing markets (list looks like a list of locales).
+    """
+    url = 'https://msdn.microsoft.com/en-us/library/dd251064.aspx'
+    page = urllib2.urlopen(url)
+    page_xml = BeautifulSoup(page, 'lxml')
+    # Look in the table data
+    market = page_xml.find_all('td')
+    market_locales = [el[1].text.strip() for el in enumerate(market) if
+                      el[0] % 2 == 0]
+    return market_locales
+
+
+def get_bing_xml():
+    """
+    Get BingXML file which contains the URL of the Bing Photo of the day.
+
+    :return: URL with the Bing Photo of the day.
+    """
+    # idx = Number days previous the present day.
+    # 0 means today, 1 means yesterday
+    # n = Number of images previous the day given by idx
+    # mkt = Bing Market Area, see get_valid_bing_markets.
+    market = 'en-US'
+    default_locale = locale.getdefaultlocale()[0]
+    if default_locale in get_valid_bing_markets():
+        market = default_locale
+    return "http://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=%s" % market
+
+BingXML_URL = get_bing_xml()
 page = urllib2.urlopen(BingXML_URL)
 BingXML = BeautifulSoup(page, "lxml")
 
