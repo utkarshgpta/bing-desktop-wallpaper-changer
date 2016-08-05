@@ -11,7 +11,7 @@ Here we can get data in any of the formats but substituting the value of **forma
 
 **idx** denotes the *day before the current day*. idx=0 means current day, idx=1 means yesterday and so on.
 **n** is an integer denoting the *number of days before the day denoted by idx*. It grabs data about all the n number of images.
-**mkt** denotes the *area*. 
+**mkt** denotes the *area*. The script will try to match your locale to one of the supported Bing Market areas, falling back to 'en-US' if it fails to do so.
 
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
@@ -44,6 +44,22 @@ Clone/download project. Open terminal in the root folder of the project
     Comment: Automatically changes desktop wallpaper!
     ```
     ![gnome-session-properties](startup.png "gnome-session-properties")
+
+If you run gnome 3 from Fedora, you have to create the file
+
+/home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
+
+    the file contents look like:
+    ```
+    [Desktop Entry]
+    Type=Application
+    Terminal=false
+    Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
+    Name=Bing Desktop Wallpaper Changer
+    ```
+
+Replace [user] with your actual user name and /path/to/ with your actual
+parent directory for the bing-desktop-wallpaper-changer directory.
 
 ## Dependencies
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
