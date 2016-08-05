@@ -71,7 +71,19 @@ def get_screen_resolution_str():
     # Get appropriate screen resolution
     window = Gtk.Window()
     screen = window.get_screen()
-    return r'%sx%s' % (screen.get_width(), screen.get_height())
+    monitors = []
+    nmons = screen.get_n_monitors()
+    if nmons == 1:
+    	return r'%sx%s' % (screen.get_width(), screen.get_height())
+    else:
+    	maxw = 0
+    	maxh = 0
+    	for m in range(nmons):
+    		mg = screen.get_monitor_geometry(m)
+    		if mg.width > maxw or mg.height > maxw:
+    			maxw = mg.width
+    			maxh = mg.height
+    	return r'%sx%s' % (maxw, maxh)
 
 
 def get_image_metadata():
