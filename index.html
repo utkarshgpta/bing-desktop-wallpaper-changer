@@ -57,7 +57,7 @@
 
 <p><strong>idx</strong> denotes the <em>day before the current day</em>. idx=0 means current day, idx=1 means yesterday and so on.
 <strong>n</strong> is an integer denoting the <em>number of days before the day denoted by idx</em>. It grabs data about all the n number of images.
-<strong>mkt</strong> denotes the <em>area</em>. </p>
+<strong>mkt</strong> denotes the <em>area</em>. The script will try to match your locale to one of the supported Bing Market areas, falling back to 'en-US' if it fails to do so.</p>
 
 <p>All the wallpapers are stored in '<strong>/home/[user]/Pictures/BingWallpapers/</strong>'</p>
 
@@ -100,6 +100,23 @@ Comment: Automatically changes desktop wallpaper!
 <p><img src="https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/blob/master/startup.png?raw=true" alt="gnome-session-properties" title="gnome-session-properties"></p>
 </li>
 </ol>
+
+<p>If you run gnome 3 from Fedora, you have to create the file</p>
+
+<p>/home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop</p>
+
+<pre><code>the file contents look like:
+```
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
+Name=Bing Desktop Wallpaper Changer
+```
+</code></pre>
+
+<p>Replace [user] with your actual user name and /path/to/ with your actual
+parent directory for the bing-desktop-wallpaper-changer directory.</p>
 
 <h2>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
