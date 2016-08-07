@@ -1,0 +1,6 @@
+bing-desktop-wallpaper-changer (0.1-1) UNRELEASED; urgency=low
+
+  * Initial release
+  * This is my first Debian package.
+
+ -- ALJI Mohamed <mr.m.alji@gmail.com>  Sun, 07 Aug 2016 19:22:37 +0000
