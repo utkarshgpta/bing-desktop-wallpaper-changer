@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=BingWallpaperChanger
+Command=/usr/bin/bing-desktop-wallpaper-changer.py
+Comment=Automatically changes desktop wallpaper!
