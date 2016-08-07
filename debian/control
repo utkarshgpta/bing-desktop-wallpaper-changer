@@ -1,0 +1,14 @@
+Source: bing-desktop-wallpaper-changer
+Section: python
+Priority: optional
+Maintainer: ALJI Mohamed <mr.m.alji@gmail.com>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
+Homepage: https://utkarshgpta.github.io/bing-desktop-wallpaper-changer/
+Vcs-Browser: https://github.com/OSryx/bing-desktop-wallpaper-changer.git
+
+Package: bing-desktop-wallpaper-changer
+Architecture: all
+Depends: python-bs4 (>=4.4.1), python-lxml (>=3.5.0)
+Description: bing-desktop-wallpaper-changer
+ Automatically downloads and changes desktop wallpaper to Bing Photo of the Day.
