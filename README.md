@@ -67,8 +67,11 @@ parent directory for the bing-desktop-wallpaper-changer directory.
 * python-gi module
 
 ## To do
-* Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
-* Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
+- [x] Set the wallpaper according to the current screen size.
+- [x] Support for dual monitors
+- [x] Added as a Debian package in another branch
+- [ ] Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
+- [ ] Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
 
 *Any other suggestions welcome!*
 
