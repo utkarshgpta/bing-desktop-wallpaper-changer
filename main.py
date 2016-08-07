@@ -72,21 +72,39 @@ def get_screen_resolution_str():
 
     :return: String with your current screen resolution.
     """
-    # Get appropriate screen resolution
+    sizes = [[800,[600]],[1024,[768]],[1280,[720,768]],[1366,[768]],[1920,[1080,1200]]]
+    sizes_mobile = [[768,[1024]],[720,[1280]],[768,[1280,1366]],[1080,[1920]]]
     window = Gtk.Window()
     screen = window.get_screen()
     nmons = screen.get_n_monitors()
+    maxw = 0
+    maxh = 0
+    sizew = 0
+    sizeh = 0
     if nmons == 1:
-    	return r'%sx%s' % (screen.get_width(), screen.get_height())
+    	maxw = screen.get_width()
+    	maxh = screen.get_height()
     else:
-    	maxw = 0
-    	maxh = 0
     	for m in range(nmons):
     		mg = screen.get_monitor_geometry(m)
     		if mg.width > maxw or mg.height > maxw:
     			maxw = mg.width
     			maxh = mg.height
-    	return r'%sx%s' % (maxw, maxh)
+    if maxw>maxh:
+    	v_array = sizes
+    else:
+    	v_array = sizes_mobile
+    for m in v_array:
+    	if (maxw<=m[0]):
+    		sizew = m[0]
+       		sizeh = m[1][len(m[1])-1]
+       		for e in m[1]:
+       			if (maxh<=e):
+       				sizeh = e
+       				break
+       		break
+    
+    return r'%sx%s' % (sizew, sizeh)
 
 
 def get_image_metadata():
