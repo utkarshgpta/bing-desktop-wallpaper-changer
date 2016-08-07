@@ -5,10 +5,10 @@ import locale
 import os
 import re
 import sys
-try:
+try: #try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
-except ImportError:
+except ImportError: #fall back to python2
     from urllib import urlretrieve
     from urllib2 import urlopen
 
