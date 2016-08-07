@@ -5,10 +5,14 @@ import locale
 import os
 import re
 import sys
-import urllib
-import urllib2
+try: #try python 3 import
+    from urllib.request import urlopen
+    from urllib.request import urlretrieve
+except ImportError: #fall back to python2
+    from urllib import urlretrieve
+    from urllib2 import urlopen
 
-from bs4 import BeautifulSoup
+import xml.etree.ElementTree as ET
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -36,10 +40,10 @@ def get_valid_bing_markets():
     :return: List with valid Bing markets (list looks like a list of locales).
     """
     url = 'https://msdn.microsoft.com/en-us/library/dd251064.aspx'
-    page = urllib2.urlopen(url)
-    page_xml = BeautifulSoup(page, 'lxml')
+    page = urlopen(url)
+    page_xml = ET.parse(page).getroot()
     # Look in the table data
-    market = page_xml.find_all('td')
+    market = page_xml.findall('td')
     market_locales = [el[1].text.strip() for el in enumerate(market) if
                       el[0] % 2 == 0]
     return market_locales
@@ -92,10 +96,12 @@ def get_image_metadata():
     :return: XML tag object for the wallpaper image.
     """
     bing_xml_url = get_bing_xml()
-    page = urllib2.urlopen(bing_xml_url)
-    bing_xml = BeautifulSoup(page, "lxml")
+    page = urlopen(bing_xml_url)
+
+    bing_xml = ET.parse(page).getroot()
+
     # For extracting complete URL of the image
-    images = bing_xml.find_all('image')
+    images = bing_xml.findall('image')
     return images[0]
 
 
@@ -106,7 +112,7 @@ def get_image_url(metadata):
     :param metadata: XML tag object with image metadata.
     :return: URL with Bing Wallpaper image.
     """
-    base_image = metadata.url.text
+    base_image = metadata.find("url").text
     # Replace image resolution with the correct resolution
     # from your main monitor
     screen_size = get_screen_resolution_str()
@@ -132,8 +138,10 @@ def main():
     Notify.init(app_name)
     exit_status = 0
     try:
+
         image_metadata = get_image_metadata()
-        image_name = image_metadata.startdate.text + ".jpg"
+
+        image_name = image_metadata.find("startdate").text + ".jpg"
         image_url = get_image_url(image_metadata)
         # Images saved to '/home/[user]/Pictures/BingWallpapers/'
         download_path = os.path.join(os.path.expanduser('~'), 'Pictures',
@@ -142,21 +150,21 @@ def main():
         image_path = os.path.join(download_path, image_name)
 
         if not os.path.isfile(image_path):
-            urllib.urlretrieve(image_url, image_path)
+            urlretrieve(image_url, image_path)
             bg_changer = BackgroundChanger()
             bg_changer.change_background(image_path)
             summary = 'Bing Wallpaper updated successfully'
-            body = image_metadata.copyright.text.encode('utf-8')
+            body = image_metadata.find("copyright").text.encode('utf-8')
         else:
             summary = 'Bing Wallpaper unchanged'
             body = ('%s already exists in Wallpaper directory' %
-                    image_metadata.copyright.text.encode('utf-8'))
+                    image_metadata.find("copyright").text.encode('utf-8'))
     except Exception as err:
         summary = 'Error executing %s' % app_name
         body = err
         exit_status = 1
 
-    app_notification = Notify.Notification.new(summary, body)
+    app_notification = Notify.Notification.new(summary, str(body))
     app_notification.show()
     sys.exit(exit_status)
 
