@@ -5,11 +5,14 @@ import locale
 import os
 import re
 import sys
-import urllib
-import urllib2
+try:
+    from urllib.request import urlopen
+    from urllib.request import urlretrieve
+except ImportError:
+    from urllib import urlretrieve
+    from urllib2 import urlopen
 
 import xml.etree.ElementTree as ET
-#from bs4 import BeautifulSoup
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -37,7 +40,7 @@ def get_valid_bing_markets():
     :return: List with valid Bing markets (list looks like a list of locales).
     """
     url = 'https://msdn.microsoft.com/en-us/library/dd251064.aspx'
-    page = urllib2.urlopen(url)
+    page = urlopen(url)
     page_xml = ET.parse(page).getroot()
     # Look in the table data
     market = page_xml.findall('td')
@@ -93,13 +96,12 @@ def get_image_metadata():
     :return: XML tag object for the wallpaper image.
     """
     bing_xml_url = get_bing_xml()
-    page = urllib2.urlopen(bing_xml_url)
+    page = urlopen(bing_xml_url)
 
     bing_xml = ET.parse(page).getroot()
 
     # For extracting complete URL of the image
     images = bing_xml.findall('image')
-    print(images[0].find("startdate").text)
     return images[0]
 
 
@@ -148,7 +150,7 @@ def main():
         image_path = os.path.join(download_path, image_name)
 
         if not os.path.isfile(image_path):
-            urllib.urlretrieve(image_url, image_path)
+            urlretrieve(image_url, image_path)
             bg_changer = BackgroundChanger()
             bg_changer.change_background(image_path)
             summary = 'Bing Wallpaper updated successfully'
