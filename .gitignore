@@ -87,4 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
-bin-desktop-wallpaper-changer.tar.gz
+
+# intermediate files
+bing-desktop-wallpaper-changer.tar.gz
