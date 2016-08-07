@@ -64,6 +64,7 @@ parent directory for the bing-desktop-wallpaper-changer directory.
 ## Dependencies
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
 * [lxml](http://lxml.de/)
+* python-gi module
 
 ## To do
 * Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
