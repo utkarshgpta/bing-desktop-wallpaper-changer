@@ -82,28 +82,32 @@ BING_MARKETS = [u'ar-XA',
                 u'zh-HK',
                 u'zh-TW']
 
-
-class BackgroundChanger(object):
-    SCHEMA = 'org.gnome.desktop.background'
-    KEY = 'picture-uri'
-
-    def change_background(self, filename):
-        gsettings = Gio.Settings.new(self.SCHEMA)
-        gsettings.set_string(self.KEY, "file://" + filename)
-        gsettings.apply()
-
-    def change_screensaver(self, filename):
-        gsettings = Gio.Settings.new('org.gnome.desktop.screensaver')
-        gsettings.set_string('picture-uri', 'file://' + filename)
-        gsettings.apply()
-
-
 config_file_skeleton = """[market]
 # If you want to override the current Bing market dectection,
 # set your preferred market here. For a list of markets, see
 # https://msdn.microsoft.com/en-us/library/dd251064.aspx
 area =
 """
+
+
+def get_file_uri(filename):
+    return 'file://%s' % filename
+
+
+def set_gsetting(schema, key, value):
+    gsettings = Gio.Settings.new(schema)
+    gsettings.set_string(key, value)
+    gsettings.apply()
+
+
+def change_background(filename):
+    set_gsetting('org.gnome.desktop.background', 'picture-uri',
+                 get_file_uri(filename))
+
+
+def change_screensaver(filename):
+    set_gsetting('org.gnome.desktop.screensaver', 'picture-uri',
+                 get_file_uri(filename))
 
 
 def get_config_file():
@@ -266,9 +270,8 @@ def main():
 
         if not os.path.isfile(image_path):
             urlretrieve(image_url, image_path)
-            bg_changer = BackgroundChanger()
-            bg_changer.change_background(image_path)
-            bg_changer.change_screensaver(image_path)
+            change_background(image_path)
+            change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
             body = image_metadata.find("copyright").text.encode('utf-8')
         else:
