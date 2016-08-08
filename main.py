@@ -23,6 +23,65 @@ from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Notify
 
+BING_MARKETS = [u'ar-XA',
+                u'bg-BG',
+                u'cs-CZ',
+                u'da-DK',
+                u'de-AT',
+                u'de-CH',
+                u'de-DE',
+                u'el-GR',
+                u'en-AU',
+                u'en-CA',
+                u'en-GB',
+                u'en-ID',
+                u'en-IE',
+                u'en-IN',
+                u'en-MY',
+                u'en-NZ',
+                u'en-PH',
+                u'en-SG',
+                u'en-US',
+                u'en-XA',
+                u'en-ZA',
+                u'es-AR',
+                u'es-CL',
+                u'es-ES',
+                u'es-MX',
+                u'es-US',
+                u'es-XL',
+                u'et-EE',
+                u'fi-FI',
+                u'fr-BE',
+                u'fr-CA',
+                u'fr-CH',
+                u'fr-FR',
+                u'he-IL',
+                u'hr-HR',
+                u'hu-HU',
+                u'it-IT',
+                u'ja-JP',
+                u'ko-KR',
+                u'lt-LT',
+                u'lv-LV',
+                u'nb-NO',
+                u'nl-BE',
+                u'nl-NL',
+                u'pl-PL',
+                u'pt-BR',
+                u'pt-PT',
+                u'ro-RO',
+                u'ru-RU',
+                u'sk-SK',
+                u'sl-SL',
+                u'sv-SE',
+                u'th-TH',
+                u'tr-TR',
+                u'uk-UA',
+                u'zh-CN',
+                u'zh-HK',
+                u'zh-TW']
+
 
 class BackgroundChanger(object):
     SCHEMA = 'org.gnome.desktop.background'
@@ -45,23 +104,6 @@ config_file_skeleton = """[market]
 # https://msdn.microsoft.com/en-us/library/dd251064.aspx
 area =
 """
-
-
-def get_valid_bing_markets():
-    """
-    Find valid Bing markets for area auto detection.
-
-    :see: https://msdn.microsoft.com/en-us/library/dd251064.aspx
-    :return: List with valid Bing markets (list looks like a list of locales).
-    """
-    url = 'https://msdn.microsoft.com/en-us/library/dd251064.aspx'
-    page = urlopen(url)
-    page_xml = ET.parse(page).getroot()
-    # Look in the table data
-    market = page_xml.findall('td')
-    market_locales = [el[1].text.strip() for el in enumerate(market) if
-                      el[0] % 2 == 0]
-    return market_locales
 
 
 def get_config_file():
@@ -99,7 +141,7 @@ def get_market():
         return market_area_override
 
     default_locale = locale.getdefaultlocale()[0]
-    if default_locale in get_valid_bing_markets():
+    if default_locale in BING_MARKETS:
         return default_locale
 
     return 'en-US'
