@@ -8,9 +8,11 @@ import sys
 try: #try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
+    from configparser import ConfigParser
 except ImportError: #fall back to python2
     from urllib import urlretrieve
     from urllib2 import urlopen
+    from ConfigParser import ConfigParser
 
 import xml.etree.ElementTree as ET
 
@@ -37,6 +39,14 @@ class BackgroundChanger():
         gsettings.apply();
 
 
+config_file_skeleton = """[market]
+# If you want to override the current Bing market dectection,
+# set your preferred market here. For a list of markets, see
+# https://msdn.microsoft.com/en-us/library/dd251064.aspx
+area =
+"""
+
+
 def get_valid_bing_markets():
     """
     Find valid Bing markets for area auto detection.
@@ -54,6 +64,47 @@ def get_valid_bing_markets():
     return market_locales
 
 
+def get_config_file():
+    """
+    Get the path to the program's config file.
+
+    :return: Path to the program's config file.
+    """
+    config_dir = os.path.join(os.path.expanduser('~'), '.config',
+                              'bing-desktop-wallpaper-changer')
+    init_dir(config_dir)
+    config_path = os.path.join(config_dir, 'config.ini')
+    if not os.path.isfile(config_path):
+        with open(config_path, 'w') as config_file:
+            config_file.write(config_file_skeleton)
+    return config_path
+
+
+def get_market():
+    """
+    Get the desired Bing Market.
+
+    In order of preference, this program will use:
+    * Config value market.area from desktop_wallpaper_changer.ini
+    * Default locale, in case that's a valid Bing market
+    * Fallback value is 'en-US'.
+
+    :return: Bing Market
+    :rtype: str
+    """
+    config = ConfigParser()
+    config.read(get_config_file())
+    market_area_override = config.get('market', 'area')
+    if market_area_override:
+        return market_area_override
+
+    default_locale = locale.getdefaultlocale()[0]
+    if default_locale in get_valid_bing_markets():
+        return default_locale
+
+    return 'en-US'
+
+
 def get_bing_xml():
     """
     Get BingXML file which contains the URL of the Bing Photo of the day.
@@ -64,10 +115,7 @@ def get_bing_xml():
     # 0 means today, 1 means yesterday
     # n = Number of images previous the day given by idx
     # mkt = Bing Market Area, see get_valid_bing_markets.
-    market = 'en-US'
-    default_locale = locale.getdefaultlocale()[0]
-    if default_locale in get_valid_bing_markets():
-        market = default_locale
+    market = get_market()
     return "http://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=%s" % market
 
 

@@ -11,7 +11,23 @@ Here we can get data in any of the formats but substituting the value of **forma
 
 **idx** denotes the *day before the current day*. idx=0 means current day, idx=1 means yesterday and so on.
 **n** is an integer denoting the *number of days before the day denoted by idx*. It grabs data about all the n number of images.
-**mkt** denotes the *area*. The script will try to match your locale to one of the supported Bing Market areas, falling back to 'en-US' if it fails to do so.
+**mkt** denotes the *area*. The script will try to match your locale to one of the supported Bing Market areas, falling back to 'en-US' if it fails to do so. You can also force a particular market area (see list of valid markets in https://msdn.microsoft.com/en-us/library/dd251064.aspx) in the config file:
+
+```
+~/.config/bing-desktop-wallpaper-changer/config.ini
+```
+
+Example:
+
+```
+[market]
+# If you want to override the current Bing market dectection,
+# set your preferred market here. For a list of markets, see
+# https://msdn.microsoft.com/en-us/library/dd251064.aspx
+area = 'bg-BG'
+```
+
+To force your area to be 'bg-BG' (Bulgarian - Bulgaria).
 
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
