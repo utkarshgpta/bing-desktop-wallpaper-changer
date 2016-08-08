@@ -22,14 +22,21 @@ from gi.repository import Gtk
 from gi.repository import Notify
 
 
-class BackgroundChanger():
-    SCHEMA = 'org.gnome.desktop.background'
-    KEY = 'picture-uri'
+class BackgroundChanger(object):
+
+    def __init__(self):
+        self.background_schema = 'org.gnome.desktop.background'
+        self.lockscreen_schema = 'org.gnome.desktop.screensaver'
+        self.key = 'picture-uri'
+
+    def _change_background(self, schema, filename):
+        gsettings = Gio.Settings.new(schema)
+        gsettings.set_string(self.key, "file://" + filename)
+        gsettings.apply()
 
     def change_background(self, filename):
-        gsettings = Gio.Settings.new(self.SCHEMA)
-        gsettings.set_string(self.KEY, "file://" + filename)
-        gsettings.apply()
+        self._change_background(self.background_schema, filename)
+        self._change_background(self.lockscreen_schema, filename)
 
 
 def get_valid_bing_markets():
