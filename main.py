@@ -31,6 +31,11 @@ class BackgroundChanger():
         gsettings.set_string(self.KEY, "file://" + filename)
         gsettings.apply()
 
+    def change_screensaver(self, filename):
+        gsettings = Gio.Settings.new('org.gnome.desktop.screensaver')
+        gsettings.set_string('picture-uri', 'file://' + filename)
+        gsettings.apply();
+
 
 def get_valid_bing_markets():
     """
@@ -82,27 +87,27 @@ def get_screen_resolution_str():
     sizew = 0
     sizeh = 0
     if nmons == 1:
-    	maxw = screen.get_width()
-    	maxh = screen.get_height()
+        maxw = screen.get_width()
+        maxh = screen.get_height()
     else:
-    	for m in range(nmons):
-    		mg = screen.get_monitor_geometry(m)
-    		if mg.width > maxw or mg.height > maxw:
-    			maxw = mg.width
-    			maxh = mg.height
+        for m in range(nmons):
+            mg = screen.get_monitor_geometry(m)
+            if mg.width > maxw or mg.height > maxw:
+                maxw = mg.width
+                maxh = mg.height
     if maxw>maxh:
-    	v_array = sizes
+        v_array = sizes
     else:
-    	v_array = sizes_mobile
+        v_array = sizes_mobile
     for m in v_array:
-    	if (maxw<=m[0]):
-    		sizew = m[0]
-       		sizeh = m[1][len(m[1])-1]
-       		for e in m[1]:
-       			if (maxh<=e):
-       				sizeh = e
-       				break
-       		break
+        if (maxw<=m[0]):
+            sizew = m[0]
+            sizeh = m[1][len(m[1])-1]
+            for e in m[1]:
+                if (maxh<=e):
+                    sizeh = e
+                    break
+            break
     
     return r'%sx%s' % (sizew, sizeh)
 
@@ -171,6 +176,7 @@ def main():
             urlretrieve(image_url, image_path)
             bg_changer = BackgroundChanger()
             bg_changer.change_background(image_path)
+            bg_changer.change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
             body = image_metadata.find("copyright").text.encode('utf-8')
         else:
