@@ -5,10 +5,10 @@ import locale
 import os
 import re
 import sys
-try: #try python 3 import
+try:  # try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
-except ImportError: #fall back to python2
+except ImportError:  # fall back to python2
     from urllib import urlretrieve
     from urllib2 import urlopen
 
@@ -22,14 +22,21 @@ from gi.repository import Gtk
 from gi.repository import Notify
 
 
-class BackgroundChanger():
-    SCHEMA = 'org.gnome.desktop.background'
-    KEY = 'picture-uri'
+class BackgroundChanger(object):
+
+    def __init__(self):
+        self.background_schema = 'org.gnome.desktop.background'
+        self.lockscreen_schema = 'org.gnome.desktop.screensaver'
+        self.key = 'picture-uri'
+
+    def _change_background(self, schema, filename):
+        gsettings = Gio.Settings.new(schema)
+        gsettings.set_string(self.key, "file://" + filename)
+        gsettings.apply()
 
     def change_background(self, filename):
-        gsettings = Gio.Settings.new(self.SCHEMA)
-        gsettings.set_string(self.KEY, "file://" + filename)
-        gsettings.apply()
+        self._change_background(self.background_schema, filename)
+        self._change_background(self.lockscreen_schema, filename)
 
 
 def get_valid_bing_markets():
@@ -72,8 +79,10 @@ def get_screen_resolution_str():
 
     :return: String with your current screen resolution.
     """
-    sizes = [[800,[600]],[1024,[768]],[1280,[720,768]],[1366,[768]],[1920,[1080,1200]]]
-    sizes_mobile = [[768,[1024]],[720,[1280]],[768,[1280,1366]],[1080,[1920]]]
+    sizes = [[800, [600]], [1024, [768]], [1280, [720, 768]],
+             [1366, [768]], [1920, [1080, 1200]]]
+    sizes_mobile = [[768, [1024]], [720, [1280]],
+                    [768, [1280, 1366]], [1080, [1920]]]
     window = Gtk.Window()
     screen = window.get_screen()
     nmons = screen.get_n_monitors()
@@ -82,28 +91,28 @@ def get_screen_resolution_str():
     sizew = 0
     sizeh = 0
     if nmons == 1:
-    	maxw = screen.get_width()
-    	maxh = screen.get_height()
+        maxw = screen.get_width()
+        maxh = screen.get_height()
     else:
-    	for m in range(nmons):
-    		mg = screen.get_monitor_geometry(m)
-    		if mg.width > maxw or mg.height > maxw:
-    			maxw = mg.width
-    			maxh = mg.height
-    if maxw>maxh:
-    	v_array = sizes
+        for m in range(nmons):
+            mg = screen.get_monitor_geometry(m)
+            if mg.width > maxw or mg.height > maxw:
+                maxw = mg.width
+                maxh = mg.height
+    if maxw > maxh:
+        v_array = sizes
     else:
-    	v_array = sizes_mobile
+        v_array = sizes_mobile
     for m in v_array:
-    	if (maxw<=m[0]):
-    		sizew = m[0]
-       		sizeh = m[1][len(m[1])-1]
-       		for e in m[1]:
-       			if (maxh<=e):
-       				sizeh = e
-       				break
-       		break
-    
+        if maxw <= m[0]:
+            sizew = m[0]
+            sizeh = m[1][len(m[1]) - 1]
+            for e in m[1]:
+                if (maxh <= e):
+                    sizeh = e
+                    break
+            break
+
     return r'%sx%s' % (sizew, sizeh)
 
 
