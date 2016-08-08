@@ -5,11 +5,11 @@ import locale
 import os
 import re
 import sys
-try: #try python 3 import
+try:  # try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
     from configparser import ConfigParser
-except ImportError: #fall back to python2
+except ImportError:  # fall back to python2
     from urllib import urlretrieve
     from urllib2 import urlopen
     from ConfigParser import ConfigParser
@@ -24,7 +24,7 @@ from gi.repository import Gtk
 from gi.repository import Notify
 
 
-class BackgroundChanger():
+class BackgroundChanger(object):
     SCHEMA = 'org.gnome.desktop.background'
     KEY = 'picture-uri'
 
@@ -36,7 +36,7 @@ class BackgroundChanger():
     def change_screensaver(self, filename):
         gsettings = Gio.Settings.new('org.gnome.desktop.screensaver')
         gsettings.set_string('picture-uri', 'file://' + filename)
-        gsettings.apply();
+        gsettings.apply()
 
 
 config_file_skeleton = """[market]
@@ -125,8 +125,10 @@ def get_screen_resolution_str():
 
     :return: String with your current screen resolution.
     """
-    sizes = [[800,[600]],[1024,[768]],[1280,[720,768]],[1366,[768]],[1920,[1080,1200]]]
-    sizes_mobile = [[768,[1024]],[720,[1280]],[768,[1280,1366]],[1080,[1920]]]
+    sizes = [[800, [600]], [1024, [768]], [1280, [720, 768]],
+             [1366, [768]], [1920, [1080, 1200]]]
+    sizes_mobile = [[768, [1024]], [720, [1280]],
+                    [768, [1280, 1366]], [1080, [1920]]]
     window = Gtk.Window()
     screen = window.get_screen()
     nmons = screen.get_n_monitors()
@@ -143,20 +145,20 @@ def get_screen_resolution_str():
             if mg.width > maxw or mg.height > maxw:
                 maxw = mg.width
                 maxh = mg.height
-    if maxw>maxh:
+    if maxw > maxh:
         v_array = sizes
     else:
         v_array = sizes_mobile
     for m in v_array:
-        if (maxw<=m[0]):
+        if maxw <= m[0]:
             sizew = m[0]
-            sizeh = m[1][len(m[1])-1]
+            sizeh = m[1][len(m[1]) - 1]
             for e in m[1]:
-                if (maxh<=e):
+                if maxh <= e:
                     sizeh = e
                     break
             break
-    
+
     return r'%sx%s' % (sizew, sizeh)
 
 
