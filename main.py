@@ -31,6 +31,11 @@ class BackgroundChanger():
         gsettings.set_string(self.KEY, "file://" + filename)
         gsettings.apply()
 
+    def change_screensaver(self, filename):
+        gsettings = Gio.Settings.new('org.gnome.desktop.screensaver')
+        gsettings.set_string('picture-uri', 'file://' + filename)
+        gsettings.apply();
+
 
 def get_valid_bing_markets():
     """
@@ -171,6 +176,7 @@ def main():
             urlretrieve(image_url, image_path)
             bg_changer = BackgroundChanger()
             bg_changer.change_background(image_path)
+            bg_changer.change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
             body = image_metadata.find("copyright").text.encode('utf-8')
         else:
