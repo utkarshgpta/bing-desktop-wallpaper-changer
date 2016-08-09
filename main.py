@@ -197,7 +197,6 @@ def main():
     app_notification = Notify.Notification.new(summary, str(body))
     app_notification.show()
     sys.exit(exit_status)
-    
 
 if __name__ == '__main__':
     main()
