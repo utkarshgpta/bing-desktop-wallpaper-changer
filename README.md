@@ -34,21 +34,7 @@ All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 ## Installation
 Clone/download project. Open terminal in the root folder of the project
 
-1. Type in either of the two commands
-    * Recommended
-
-      ```shell
-      pip install -r requirements.txt
-      ```
-    *  Or install them individually
-
-        ```shell
-        sudo apt-get install python-bs4
-        ```
-        ```shell
-        sudo apt-get install python-lxml
-        ```
-2. Then add the script as a startup application. Type in terminal
+Then add the script as a startup application. Type in terminal
 
     ```shell
     gnome-session-properties
@@ -76,11 +62,6 @@ If you run gnome 3 from Fedora, you have to create the file
 
 Replace [user] with your actual user name and /path/to/ with your actual
 parent directory for the bing-desktop-wallpaper-changer directory.
-
-## Dependencies
-* [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
-* [lxml](http://lxml.de/)
-* python-gi module
 
 ## To do
 - [x] Set the wallpaper according to the current screen size.

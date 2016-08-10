@@ -286,8 +286,8 @@ def main():
     text = image_name + " -- " + body +  "\n"  
     
     if "already exists" not in text:
-		with open(download_path + "/image-details.txt", "a+") as myfile:
-			myfile.write(text)        
+        with open(download_path + "/image-details.txt", "a+") as myfile:
+            myfile.write(text)        
 
     app_notification = Notify.Notification.new(summary, str(body))
     app_notification.show()
