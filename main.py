@@ -283,7 +283,7 @@ def main():
         body = err
         exit_status = 1
         
-    text = image_name + " -- " + body +  "\n"  
+    text = str(image_name) + " -- " + str(body) +  "\n"  
     
     if "already exists" not in text:
         with open(download_path + "/image-details.txt", "a+") as myfile:
