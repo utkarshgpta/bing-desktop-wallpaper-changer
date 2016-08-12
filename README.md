@@ -36,29 +36,33 @@ Clone/download project. Open terminal in the root folder of the project
 
 Then add the script as a startup application. Type in terminal
 
-    ```shell
-    gnome-session-properties
-    ```
-    then add a startup program as:
-    ```
-    Name: BingWallpaperChanger
-    Command: python /path/to/main.py
-    Comment: Automatically changes desktop wallpaper!
-    ```
-    ![gnome-session-properties](startup.png "gnome-session-properties")
+```shell
+gnome-session-properties
+```
+
+then add a startup program as:
+```plaintext
+Name: BingWallpaperChanger
+Command: python /path/to/main.py
+Comment: Automatically changes desktop wallpaper!
+```
+
+![gnome-session-properties](startup.png "gnome-session-properties")
 
 If you run gnome 3 from Fedora, you have to create the file
 
 /home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
 
-    the file contents look like:
-    ```
-    [Desktop Entry]
-    Type=Application
-    Terminal=false
-    Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
-    Name=Bing Desktop Wallpaper Changer
-    ```
+the file contents look like:
+
+
+```plaintext
+[Desktop Entry]
+Type=Application
+Terminal=false
+Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
+Name=Bing Desktop Wallpaper Changer
+```
 
 Replace [user] with your actual user name and /path/to/ with your actual
 parent directory for the bing-desktop-wallpaper-changer directory.
