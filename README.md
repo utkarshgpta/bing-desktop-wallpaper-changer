@@ -63,12 +63,24 @@ If you run gnome 3 from Fedora, you have to create the file
 Replace [user] with your actual user name and /path/to/ with your actual
 parent directory for the bing-desktop-wallpaper-changer directory.
 
+## Limit the size of all downloaded wallpapers
+The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
+```
+~/.config/bing-desktop-wallpaper-changer/config.ini
+```
+and set option 
+```
+dir_max_size
+```
+to your liking. set it to zero or nonegative will keep an unlimit amount of downloaded wallpaper
+
+
 ## To do
 - [x] Set the wallpaper according to the current screen size.
 - [x] Support for dual monitors
 - [x] Added as a Debian package in another branch
-- [ ] Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
-- [ ] Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
+- [x] Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
+- [x] Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
 
 *Any other suggestions welcome!*
 
