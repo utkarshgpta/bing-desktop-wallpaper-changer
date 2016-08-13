@@ -35,7 +35,7 @@ All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
 Clone/download project (or just the main.py file)
 
-### Autostart With gnome-session-properties
+#### Autostart With gnome-session-properties
 Then add the script as a startup application. Type in terminal
 
 ```shell
@@ -51,7 +51,7 @@ Comment: Automatically changes desktop wallpaper!
 
 ![gnome-session-properties](startup.png "gnome-session-properties")
 
-### Autostart with ~/.config/autostart
+#### Autostart with ~/.config/autostart
 If you run gnome 3 from Fedora, you have to create the file
 
 /home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
@@ -70,7 +70,7 @@ Name=Bing Desktop Wallpaper Changer
 Replace [user] with your actual user name and /path/to/ with your actual
 parent directory for the bing-desktop-wallpaper-changer directory.
 
-### Start with timer
+#### Start with timer
 
 A more elegant way to setup this script is using systemd.timer or cron job.
 Since Bing only change their photo of the day every 24 hours, I will be optimize if you set up a timer unit to run exactly at the time new photo becomes available. To do that, go to `~/.config/systemd/user` and create two files:
@@ -98,9 +98,9 @@ Persistent=true
 [Install]
 WantedBy=timers.target
 ```
-
 Those two files must have the same name, differ only in the extension part (.service vs .timer). The `bing.service` file contain t he `ExecStart` option which specify the comman to execute, replace it to suit your installation.
 `bing.timer` file will specify when would `bing.service` be executed. In the example above the service will run if either of those 3 conditions are met:
+
 1. It's 20 seconds after the system boot up, specified by option `OnBootSec=20`, you can increase this number  to your liking.
 2. It's 24 hours since the last time the service run, specified by option `OnUnitActiveSec=1d`
 3. It's 3:00pm, specified by option `OnCalendar=*-*-* 15:00:00`, which is around the time bing change their photo in my local time. 
@@ -108,8 +108,8 @@ You can edit, add or remove thos conditon to your liking. If you are not using s
 
 Afer finish editing those file, activate the service with the following command
 ```shell
-systemctl --usr enable bing.timer
-systemctl --usr start bing.timer
+systemctl --user enable bing.timer
+systemctl --user start bing.timer
 ```
 
 
