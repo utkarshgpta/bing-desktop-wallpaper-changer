@@ -19,7 +19,7 @@ Here we can get data in any of the formats but substituting the value of **forma
 
 Example:
 
-```
+```ini
 [market]
 # If you want to override the current Bing market dectection,
 # set your preferred market here. For a list of markets, see
@@ -59,7 +59,7 @@ If you run gnome 3 from Fedora, you have to create the file
 the file contents look like:
 
 
-```plaintext
+```ini
 [Desktop Entry]
 Type=Application
 Terminal=false
@@ -74,6 +74,16 @@ parent directory for the bing-desktop-wallpaper-changer directory.
 
 A more elegant way to setup this script is using systemd.timer or cron job.
 Since Bing only change their photo of the day every 24 hours, I will be optimize if you set up a timer unit to run exactly at the time new photo becomes available. To do that, go to `~/.config/systemd/user` and create two files:
+
+`bing.service`
+```ini
+[Unit]
+Description=Bing desktop wallpaper changer
+
+[Service]
+ExecStart=/path/to/main.py
+```
+
 `bing.timer`
 ```ini
 [Unit]
@@ -89,15 +99,19 @@ Persistent=true
 WantedBy=timers.target
 ```
 
-`bing.service`
-```
-[Unit]
-Description=Bing desktop wallpaper changer
+Those two files must have the same name, differ only in the extension part (.service vs .timer). The `bing.service` file contain t he `ExecStart` option which specify the comman to execute, replace it to suit your installation.
+`bing.timer` file will specify when would `bing.service` be executed. In the example above the service will run if either of those 3 conditions are met:
+1. It's 20 seconds after the system boot up, specified by option `OnBootSec=20`, you can increase this number  to your liking.
+2. It's 24 hours since the last time the service run, specified by option `OnUnitActiveSec=1d`
+3. It's 3:00pm, specified by option `OnCalendar=*-*-* 15:00:00`, which is around the time bing change their photo in my local time. 
+You can edit, add or remove thos conditon to your liking. If you are not using systemd you could use any scheduler for the task, like cron for example.
 
-[Service]
-ExecStart=/path/to/main.py
-
+Afer finish editing those file, activate the service with the following command
+```shell
+systemctl --usr enable bing.timer
+systemctl --usr start bing.timer
 ```
+
 
 ## Limit the size of all downloaded wallpapers
 The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
