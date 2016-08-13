@@ -89,7 +89,7 @@ to your liking. set it to zero or nonegative will keep an unlimit amount of down
 *Any other suggestions welcome!*
 
 ## Author
-Utkarsh Gupta
+Utkarsh Gupta and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).
