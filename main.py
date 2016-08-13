@@ -87,6 +87,12 @@ config_file_skeleton = """[market]
 # set your preferred market here. For a list of markets, see
 # https://msdn.microsoft.com/en-us/library/dd251064.aspx
 area =
+[directory]
+# Limit the size of the downloaded image directory
+# Size should be specified in bytes. The minimum 
+# limit is the size of 1 image (whatever size that image is)
+# Set to negative value for unlimit. Default value is 100MiB
+dir_max_size = 
 """
 
 
@@ -150,6 +156,18 @@ def get_market():
 
     return 'en-US'
 
+def get_directory_limit():
+    """
+    Get the directory sized limit
+    """
+    config = ConfigParser()
+    config.read(get_config_file())
+    try:
+        size = config.getint('directory', 'dir_max_size')
+        return size
+    except Exception as e:
+        return 100*1024*1024
+    
 
 def get_bing_xml():
     """
@@ -248,6 +266,37 @@ def init_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
+# def p3_dirscan(path):
+#     files = list()
+#     size = 0
+#     for entry in os.scandir(path):
+#         if entry.is_file() and os.path.splitext(entry.name)[1] == "jpg":
+#             files.append(entry)
+#             size = size + entry.stat.st_size;
+#     return files, size
+
+def p2_dirscan(path):
+    files = list()
+    size = 0
+    
+    for e in os.listdir(path):
+        entry = path + "/" + e
+        if os.path.isfile(entry) and os.path.splitext(entry)[1] == ".jpg":
+            s = os.path.getsize(entry)
+            files.append((entry, s))
+            size = size + s
+    files = sorted(files)
+    return files, size
+
+def check_limit():
+    download_path = os.path.join(os.path.expanduser('~'), 'Pictures',
+                                     'BingWallpapers')
+    (files,  size) = p2_dirscan(download_path)
+    max_size = get_directory_limit()
+    while(max_size > 0 and size > max_size and len(files) > 1):
+        os.remove(files[0][0])
+        size = size - files[0][1]
+        del files[0]
 
 def main():
     """
@@ -256,10 +305,9 @@ def main():
     app_name = 'Bing Desktop Wallpaper'
     Notify.init(app_name)
     exit_status = 0
+
     try:
-
         image_metadata = get_image_metadata()
-
         image_name = image_metadata.find("startdate").text + ".jpg"
         image_url = get_image_url(image_metadata)
         # Images saved to '/home/[user]/Pictures/BingWallpapers/'
@@ -278,11 +326,12 @@ def main():
             summary = 'Bing Wallpaper unchanged'
             body = ('%s already exists in Wallpaper directory' %
                     image_metadata.find("copyright").text.encode('utf-8'))
+        check_limit()
     except Exception as err:
         summary = 'Error executing %s' % app_name
         body = err
         exit_status = 1
-        
+    
     text = str(image_name) + " -- " + str(body) +  "\n"  
     
     if "already exists" not in text:
