@@ -32,8 +32,10 @@ To force your area to be 'bg-BG' (Bulgarian - Bulgaria).
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
 ## Installation
-Clone/download project. Open terminal in the root folder of the project
 
+Clone/download project (or just the main.py file)
+
+### Autostart With gnome-session-properties
 Then add the script as a startup application. Type in terminal
 
 ```shell
@@ -49,6 +51,7 @@ Comment: Automatically changes desktop wallpaper!
 
 ![gnome-session-properties](startup.png "gnome-session-properties")
 
+### Autostart with ~/.config/autostart
 If you run gnome 3 from Fedora, you have to create the file
 
 /home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
@@ -66,6 +69,35 @@ Name=Bing Desktop Wallpaper Changer
 
 Replace [user] with your actual user name and /path/to/ with your actual
 parent directory for the bing-desktop-wallpaper-changer directory.
+
+### Start with timer
+
+A more elegant way to setup this script is using systemd.timer or cron job.
+Since Bing only change their photo of the day every 24 hours, I will be optimize if you set up a timer unit to run exactly at the time new photo becomes available. To do that, go to `~/.config/systemd/user` and create two files:
+`bing.timer`
+```ini
+[Unit]
+Description=Bing desktop wallpaper changer
+
+[Timer]
+OnBootSec=20
+OnUnitActiveSec=1d
+OnCalendar=*-*-* 15:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+`bing.service`
+```
+[Unit]
+Description=Bing desktop wallpaper changer
+
+[Service]
+ExecStart=/path/to/main.py
+
+```
 
 ## Limit the size of all downloaded wallpapers
 The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
