@@ -77,7 +77,7 @@ parent directory for the bing-desktop-wallpaper-changer directory.
 *Any other suggestions welcome!*
 
 ## Author
-Utkarsh Gupta
+Utkarsh Gupta and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).
