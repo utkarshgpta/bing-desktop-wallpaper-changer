@@ -193,6 +193,11 @@ def get_screen_resolution_str():
              [1366, [768]], [1920, [1080, 1200]]]
     sizes_mobile = [[768, [1024]], [720, [1280]],
                     [768, [1280, 1366]], [1080, [1920]]]
+    default_w = 1920
+    default_h = 1080
+    default_mobile_w = 1080
+    default_mobile_h = 1920
+    is_mobile = False
     window = Gtk.Window()
     screen = window.get_screen()
     nmons = screen.get_n_monitors()
@@ -213,6 +218,7 @@ def get_screen_resolution_str():
         v_array = sizes
     else:
         v_array = sizes_mobile
+        is_mobile = True
     for m in v_array:
         if maxw <= m[0]:
             sizew = m[0]
@@ -222,6 +228,14 @@ def get_screen_resolution_str():
                     sizeh = e
                     break
             break
+
+    if sizew == 0:
+        if is_mobile:
+            sizew = default_mobile_w
+            sizeh = default_mobile_h
+        else:
+            sizew = default_w
+            sizeh = default_h
 
     return r'%sx%s' % (sizew, sizeh)
 
