@@ -88,6 +88,9 @@ config_file_skeleton = """[market]
 # https://msdn.microsoft.com/en-us/library/dd251064.aspx
 area =
 [directory]
+# Download directory path. By default images are saved to
+# /home/[user]/Pictures/BingWallpapers/
+dir_path =
 # Limit the size of the downloaded image directory
 # Size should be specified in bytes. The minimum 
 # limit is the size of 1 image (whatever size that image is)
@@ -155,6 +158,23 @@ def get_market():
         return default_locale
 
     return 'en-US'
+
+
+def get_download_path():
+    config = ConfigParser()
+    config.read(get_config_file())
+
+    try:
+        path = config.get('directory', 'dir_path')
+    except Exception as e:
+        pass
+
+    if not path:
+        # By default images are saved to '/home/[user]/Pictures/BingWallpapers/'
+        return os.path.join(os.path.expanduser('~'), 'Pictures', 'BingWallpapers')
+
+    return path
+
 
 def get_directory_limit():
     """
@@ -303,8 +323,7 @@ def p2_dirscan(path):
     return files, size
 
 def check_limit():
-    download_path = os.path.join(os.path.expanduser('~'), 'Pictures',
-                                     'BingWallpapers')
+    download_path = get_download_path()
     (files,  size) = p2_dirscan(download_path)
     max_size = get_directory_limit()
     while(max_size > 0 and size > max_size and len(files) > 1):
@@ -324,9 +343,8 @@ def main():
         image_metadata = get_image_metadata()
         image_name = image_metadata.find("startdate").text + ".jpg"
         image_url = get_image_url(image_metadata)
-        # Images saved to '/home/[user]/Pictures/BingWallpapers/'
-        download_path = os.path.join(os.path.expanduser('~'), 'Pictures',
-                                     'BingWallpapers')
+
+        download_path = get_download_path()
         init_dir(download_path)
         image_path = os.path.join(download_path, image_name)
 
