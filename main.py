@@ -1,10 +1,11 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import locale
 import os
 import re
 import sys
+
 try:  # try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
@@ -17,6 +18,7 @@ except ImportError:  # fall back to python2
 import xml.etree.ElementTree as ET
 
 import gi
+
 gi.require_version('Gtk', '3.0')
 gi.require_version('Notify', '0.7')
 from gi.repository import Gio
@@ -161,19 +163,17 @@ def get_market():
 
 
 def get_download_path():
-    config = ConfigParser()
-    config.read(get_config_file())
+    # By default images are saved to '/home/[user]/Pictures/BingWallpapers/'
+    default_path = os.path.join(os.path.expanduser('~'), 'Pictures', 'BingWallpapers')
 
     try:
+        config = ConfigParser()
+        config.read(get_config_file())
         path = config.get('directory', 'dir_path')
-    except Exception as e:
-        pass
 
-    if not path:
-        # By default images are saved to '/home/[user]/Pictures/BingWallpapers/'
-        return os.path.join(os.path.expanduser('~'), 'Pictures', 'BingWallpapers')
-
-    return path
+        return path or default_path
+    except Exception:
+        return default_path
 
 
 def get_directory_limit():
@@ -185,9 +185,9 @@ def get_directory_limit():
     try:
         size = config.getint('directory', 'dir_max_size')
         return size
-    except Exception as e:
-        return 100*1024*1024
-    
+    except Exception:
+        return 100 * 1024 * 1024
+
 
 def get_bing_xml():
     """
@@ -300,6 +300,7 @@ def init_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
+
 # def p3_dirscan(path):
 #     files = list()
 #     size = 0
@@ -312,7 +313,7 @@ def init_dir(path):
 def p2_dirscan(path):
     files = list()
     size = 0
-    
+
     for e in os.listdir(path):
         entry = path + "/" + e
         if os.path.isfile(entry) and os.path.splitext(entry)[1] == ".jpg":
@@ -322,14 +323,16 @@ def p2_dirscan(path):
     files = sorted(files)
     return files, size
 
+
 def check_limit():
     download_path = get_download_path()
-    (files,  size) = p2_dirscan(download_path)
+    (files, size) = p2_dirscan(download_path)
     max_size = get_directory_limit()
-    while(max_size > 0 and size > max_size and len(files) > 1):
+    while (max_size > 0 and size > max_size and len(files) > 1):
         os.remove(files[0][0])
         size = size - files[0][1]
         del files[0]
+
 
 def main():
     """
@@ -354,6 +357,10 @@ def main():
             change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
             body = image_metadata.find("copyright").text.encode('utf-8')
+
+            text = str(image_name) + " -- " + str(body) + "\n"
+            with open(download_path + "/image-details.txt", "a+") as myfile:
+                myfile.write(text)
         else:
             summary = 'Bing Wallpaper unchanged'
             body = ('%s already exists in Wallpaper directory' %
@@ -363,16 +370,11 @@ def main():
         summary = 'Error executing %s' % app_name
         body = err
         exit_status = 1
-    
-    text = str(image_name) + " -- " + str(body) +  "\n"  
-    
-    if "already exists" not in text:
-        with open(download_path + "/image-details.txt", "a+") as myfile:
-            myfile.write(text)        
 
     app_notification = Notify.Notification.new(summary, str(body))
     app_notification.show()
     sys.exit(exit_status)
+
 
 if __name__ == '__main__':
     main()
