@@ -126,6 +126,7 @@ to your liking. set it to zero or nonegative will keep an unlimit amount of down
 
 
 ## To do
+- [ ] Create a python package.
 - [x] Set the wallpaper according to the current screen size.
 - [x] Support for dual monitors
 - [x] Added as a Debian package in another branch
