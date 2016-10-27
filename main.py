@@ -6,6 +6,9 @@ import os
 import re
 import sys
 
+# wait computer internet connection
+os.system("sleep 10")
+
 try:  # try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
@@ -84,7 +87,7 @@ BING_MARKETS = [u'ar-XA',
                 u'zh-HK',
                 u'zh-TW']
 
-config_file_skeleton = """[market]
+config_file_skeleton ="""[market]
 # If you want to override the current Bing market dectection,
 # set your preferred market here. For a list of markets, see
 # https://msdn.microsoft.com/en-us/library/dd251064.aspx
@@ -370,8 +373,9 @@ def main():
         summary = 'Error executing %s' % app_name
         body = err
         exit_status = 1
-
-    app_notification = Notify.Notification.new(summary, str(body))
+     
+    icon = os.path.abspath("Bing.svg") 
+    app_notification = Notify.Notification.new(summary, str(body), icon)
     app_notification.show()
     sys.exit(exit_status)
 
