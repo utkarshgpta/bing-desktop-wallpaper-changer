@@ -168,7 +168,7 @@ def get_market():
 
 def get_download_path():
     # By default images are saved to '/home/[user]/[Pictures]/BingWallpapers/'
-    default_path = check_output("xdg-user-dir PICTURES", shell=True).strip() + "/BingWallpapers"
+    default_path = check_output("xdg-user-dir PICTURES", shell=True).strip().encode("utf-8") + "/BingWallpapers"
 
     try:
         config = ConfigParser()
