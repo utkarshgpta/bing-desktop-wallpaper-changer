@@ -27,6 +27,7 @@ gi.require_version('Notify', '0.7')
 from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import Notify
+from subprocess import check_output
 
 BING_MARKETS = [u'ar-XA',
                 u'bg-BG',
@@ -94,7 +95,7 @@ config_file_skeleton ="""[market]
 area =
 [directory]
 # Download directory path. By default images are saved to
-# /home/[user]/Pictures/BingWallpapers/
+# /home/[user]/[Pictures]/BingWallpapers/
 dir_path =
 # Limit the size of the downloaded image directory
 # Size should be specified in bytes. The minimum 
@@ -166,8 +167,8 @@ def get_market():
 
 
 def get_download_path():
-    # By default images are saved to '/home/[user]/Pictures/BingWallpapers/'
-    default_path = os.path.join(os.path.expanduser('~'), 'Pictures', 'BingWallpapers')
+    # By default images are saved to '/home/[user]/[Pictures]/BingWallpapers/'
+    default_path = check_output("xdg-user-dir PICTURES", shell=True).strip().decode("utf-8") + "/BingWallpapers"
 
     try:
         config = ConfigParser()
