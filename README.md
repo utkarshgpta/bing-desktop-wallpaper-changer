@@ -35,6 +35,8 @@ All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
 Clone/download project (or just the main.py file)
 
+Replace "/path/to/Bing_Wallpapers" in the file bing_wallpapers.sh with the actual path to the folder Bing_Wallpapers that you've just cloned or unpacked after downloading.
+
 #### Autostart With gnome-session-properties
 Then add the script as a startup application. Type in terminal
 
@@ -45,7 +47,7 @@ gnome-session-properties
 then add a startup program as:
 ```plaintext
 Name: BingWallpaperChanger
-Command: python /path/to/main.py
+Command: /path/to/bing_wallpapers.sh
 Comment: Automatically changes desktop wallpaper!
 ```
 
@@ -63,7 +65,7 @@ the file contents look like:
 [Desktop Entry]
 Type=Application
 Terminal=false
-Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
+Exec=/path/to/bing_wallpapers.sh
 Name=Bing Desktop Wallpaper Changer
 ```
 
@@ -81,7 +83,7 @@ Since Bing only change their photo of the day every 24 hours, I will be optimize
 Description=Bing desktop wallpaper changer
 
 [Service]
-ExecStart=/path/to/main.py
+ExecStart=/path/to/bing_wallpapers.sh
 ```
 
 `bing.timer`
