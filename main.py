@@ -119,6 +119,11 @@ def change_background(filename):
     set_gsetting('org.gnome.desktop.background', 'picture-uri',
                  get_file_uri(filename))
 
+def get_current_background_uri():
+    gsettings = Gio.Settings.new('org.gnome.desktop.background')
+    path = gsettings.get_string('picture-uri')
+    return path[6:]
+
 
 def change_screensaver(filename):
     set_gsetting('org.gnome.desktop.screensaver', 'picture-uri',
@@ -354,8 +359,11 @@ def main():
         download_path = get_download_path()
         init_dir(download_path)
         image_path = os.path.join(download_path, image_name)
-
-        if not os.path.isfile(image_path):
+        if os.path.samefile(get_current_background_uri(), image_path):
+            summary = 'Bing Wallpaper unchanged'
+            body = ('%s already exists in Wallpaper directory' %
+                    image_metadata.find("copyright").text.encode('utf-8'))   
+        elif not os.path.isfile(image_path):
             urlretrieve(image_url, image_path)
             change_background(image_path)
             change_screensaver(image_path)
@@ -366,7 +374,9 @@ def main():
             with open(download_path + "/image-details.txt", "a+") as myfile:
                 myfile.write(text)
         else:
-            summary = 'Bing Wallpaper unchanged'
+            change_background(image_path)
+            change_screensaver(image_path)
+            summary = 'Wallpaper changed to current Bing wallpaper'
             body = ('%s already exists in Wallpaper directory' %
                     image_metadata.find("copyright").text.encode('utf-8'))
         check_limit()
