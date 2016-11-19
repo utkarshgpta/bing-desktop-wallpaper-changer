@@ -6,6 +6,9 @@ import os
 import re
 import sys
 
+# replace /path/to/Bing_Wallpapers with the actual path to the Bing_Wallpapers folder
+path_to_Bing_Wallpapers="/path/to/Bing_Wallpapers"
+
 # wait computer internet connection
 os.system("sleep 10")
 
@@ -374,7 +377,8 @@ def main():
         summary = 'Error executing %s' % app_name
         body = err
         exit_status = 1
-     
+    
+    os.chdir(path_to_Bing_Wallpapers)
     icon = os.path.abspath("Bing.svg") 
     app_notification = Notify.Notification.new(summary, str(body), icon)
     app_notification.show()
