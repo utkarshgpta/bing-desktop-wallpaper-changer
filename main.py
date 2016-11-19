@@ -6,8 +6,8 @@ import os
 import re
 import sys
 
-# replace /path/to/Bing_Wallpapers with the actual path to the Bing_Wallpapers folder
-path_to_Bing_Wallpapers="/home/pygeek03/bin/bing-desktop-wallpaper-changer"
+# replace /path/to/bing-desktop-wallpaper-changers with the actual path to the bing-desktop-wallpaper-changer folder
+path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
 
 # wait computer internet connection
 os.system("sleep 10")
