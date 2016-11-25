@@ -114,6 +114,31 @@ systemctl --user enable bing.timer
 systemctl --user start bing.timer
 ```
 
+#### Schedule with crontab
+1) create bing-wallpapers.sh file and edit like this:
+
+#!/bin/sh
+
+# export DBUS_SESSION_BUS_ADDRESS environment variable
+PID=$(pgrep gnome-session)
+export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
+
+python /path/to/bing-desktop-wallpaper-changer-master/main.py
+
+2) Make bing-wallpapers.sh executable:
+chmod +x /path/to/bing-wallpapers.sh
+
+3) Find your DISPLAY number:
+echo $DISPLAY
+
+4) Edit crontab
+crontab -e
+42 */12 * * * DISPLAY=:0 /path/to/bing-wallpapers.sh
+#that run command every 12 hour.
+
+#For more about crontab:
+https://help.ubuntu.com/community/CronHowto
+
 
 ## Limit the size of all downloaded wallpapers
 The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
