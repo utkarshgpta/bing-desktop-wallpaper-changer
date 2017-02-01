@@ -7,8 +7,7 @@ import re
 import sys
 
 # replace /path/to/bing-desktop-wallpaper-changers with the actual path to the bing-desktop-wallpaper-changer folder
-# path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
-path_to_Bing_Wallpapers="/home/paul/informatik/linux/bing-desktop-wallpaper-changer-mine"
+path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
 
 # wait computer internet connection
 os.system("sleep 10")
