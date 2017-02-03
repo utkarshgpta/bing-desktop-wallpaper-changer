@@ -368,7 +368,7 @@ def main():
             change_background(image_path)
             change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
-            body = image_metadata.find("copyright").text.encode('utf-8')
+            body = image_metadata.find("copyright").text
 
             text = str(image_name) + " -- " + str(body) + "\n"
             with open(download_path + "/image-details.txt", "a+") as myfile:
@@ -377,14 +377,14 @@ def main():
         elif os.path.samefile(get_current_background_uri(), image_path):
             summary = 'Bing Wallpaper unchanged'
             body = ('%s already exists in Wallpaper directory' %
-                    image_metadata.find("copyright").text.encode('utf-8'))
+                    image_metadata.find("copyright").text
         
         else:
             change_background(image_path)
             change_screensaver(image_path)
             summary = 'Wallpaper changed to current Bing wallpaper'
             body = ('%s already exists in Wallpaper directory' %
-                    image_metadata.find("copyright").text.encode('utf-8'))
+                    image_metadata.find("copyright").text
         check_limit()
         
     except Exception as err:
@@ -395,7 +395,7 @@ def main():
     
     os.chdir(path_to_Bing_Wallpapers)
     icon = os.path.abspath("Bing.svg") 
-    app_notification = Notify.Notification.new(summary, str(body), icon)
+    app_notification = Notify.Notification.new(summary, body, icon)
     app_notification.show()
     sys.exit(exit_status)
 
