@@ -9,9 +9,6 @@ import sys
 # replace /path/to/bing-desktop-wallpaper-changers with the actual path to the bing-desktop-wallpaper-changer folder
 path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
 
-# wait computer internet connection
-os.system("sleep 10")
-
 try:  # try python 3 import
     from urllib.request import urlopen
     from urllib.request import urlretrieve
