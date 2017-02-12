@@ -39,6 +39,7 @@ All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 ## Installation
 
 1 Clone/download project
+
 2 Open a terminal and enter:
 ```
 chmod +x install.sh
