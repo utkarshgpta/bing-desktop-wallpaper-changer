@@ -1,0 +1,1 @@
+python-lxml python-bs4 python-gi python-gi-cairo

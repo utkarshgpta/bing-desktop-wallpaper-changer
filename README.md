@@ -1,5 +1,10 @@
-# bing-desktop-wallpaper-changer
-Automatically downloads and changes desktop wallpaper to Bing Photo of the Day.
+# Bing-Desktop-Wallpaper-Changer Shell Script Installer
+**Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!**
+
+**No need to add the script to your Startup list or edit main.py or copy paste it or etc..**
+
+**The Installer does everything for you!**
+
 
 ## Synopsis
 Python Script for automatically downloading and changing the desktop wallpaper to Bing Photo of the day. The script runs automatically at the startup and works on GNU/Linux with Gnome. Works perfectly on Ubuntu 16.10.
@@ -33,137 +38,23 @@ All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
 ## Installation
 
-Clone/download project (or just the main.py file)
+1 Clone/download project
 
-Replace "/path/to/Bing_Wallpapers" in the file main.py with the actual path to the folder Bing_Wallpapers that you've just cloned or unpacked after downloading.
-
-#### Autostart With gnome-session-properties
-Then add the script as a startup application. Type in terminal
-
-```shell
-gnome-session-properties
+2 Open a terminal and enter:
 ```
-
-then add a startup program as:
-```plaintext
-Name: BingWallpaperChanger
-Command: /path/to/main.py
-Comment: Automatically changes desktop wallpaper!
+chmod +x install.sh
+./install.sh
 ```
-
-![gnome-session-properties](startup.png "gnome-session-properties")
-
-#### Autostart with ~/.config/autostart
-If you run gnome 3 from Fedora, you have to create the file
-
-/home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
-
-the file contents look like:
-
-
-```ini
-[Desktop Entry]
-Type=Application
-Terminal=false
-Exec=/path/to/main.py
-Name=Bing Desktop Wallpaper Changer
-```
-
-Replace [user] with your actual user name and /path/to/ with your actual
-parent directory for the bing-desktop-wallpaper-changer directory.
-
-#### Start with timer
-
-A more elegant way to setup this script is using systemd.timer or cron job.
-Since Bing only change their photo of the day every 24 hours, I will be optimize if you set up a timer unit to run exactly at the time new photo becomes available. To do that, go to `~/.config/systemd/user` and create two files:
-
-`bing.service`
-```ini
-[Unit]
-Description=Bing desktop wallpaper changer
-
-[Service]
-ExecStart=/path/to/main.py
-```
-
-`bing.timer`
-```ini
-[Unit]
-Description=Bing desktop wallpaper changer
-
-[Timer]
-OnBootSec=20
-OnUnitActiveSec=1d
-OnCalendar=*-*-* 15:00:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-```
-Those two files must have the same name, differ only in the extension part (.service vs .timer). The `bing.service` file contain t he `ExecStart` option which specify the comman to execute, replace it to suit your installation.
-`bing.timer` file will specify when would `bing.service` be executed. In the example above the service will run if either of those 3 conditions are met:
-
-1. It's 20 seconds after the system boot up, specified by option `OnBootSec=20`, you can increase this number  to your liking.
-2. It's 24 hours since the last time the service run, specified by option `OnUnitActiveSec=1d`
-3. It's 3:00pm, specified by option `OnCalendar=*-*-* 15:00:00`, which is around the time bing change their photo in my local time. 
-You can edit, add or remove thos conditon to your liking. If you are not using systemd you could use any scheduler for the task, like cron for example.
-
-Afer finish editing those file, activate the service with the following command
-```shell
-systemctl --user enable bing.timer
-systemctl --user start bing.timer
-```
-
-#### Schedule with crontab
-1) create bing-wallpapers.sh file and edit like this:
-
-   ```bash
-   #!/bin/sh
-
-   PID=$(pgrep gnome-session)
-   export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
-
-   python /path/to/bing-desktop-wallpaper-changer-master/main.py
-   ```
-
-2) Make bing-wallpapers.sh executable: `chmod +x /path/to/bing-wallpapers.sh`
-
-3) Find your DISPLAY number: `echo $DISPLAY`
-
-4) Edit crontab with `crontab -e`:
-
-   ```bash
-   42 */12 * * * DISPLAY=:0 /path/to/bing-wallpapers.sh
-   #that runs the command every 12 hours.
-   ```
-
-   For more info about crontab see [https://help.ubuntu.com/community/CronHowto](https://help.ubuntu.com/community/CronHowto).
-
-
-## Limit the size of all downloaded wallpapers
-The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
-```
-~/.config/bing-desktop-wallpaper-changer/config.ini
-```
-and set option 
-```
-dir_max_size
-```
-to your liking. set it to zero or nonegative will keep an unlimit amount of downloaded wallpaper
-
+3 DONE!
 
 ## To do
-- [ ] Create a python package.
-- [x] Set the wallpaper according to the current screen size.
-- [x] Support for dual monitors
-- [x] Added as a Debian package in another branch
-- [x] Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
-- [x] Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
+- [ ] Ask user about: Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
+- [ ] Pull request and Add this to the official repo
 
 *Any other suggestions welcome!*
 
 ## Author
-Utkarsh Gupta and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
+Utkarsh Gupta, nks15 and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).

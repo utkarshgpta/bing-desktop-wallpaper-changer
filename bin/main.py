@@ -6,7 +6,7 @@ import os
 import re
 import sys
 
-# replace /path/to/bing-desktop-wallpaper-changers with the actual path to the bing-desktop-wallpaper-changer folder
+# replace with the actual path to the bing-desktop-wallpaper-changer folder
 path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
 
 # wait computer internet connection
@@ -394,7 +394,7 @@ def main():
         exit_status = 1
     
     os.chdir(path_to_Bing_Wallpapers)
-    icon = os.path.abspath("Bing.svg") 
+    icon = os.path.abspath("icon.svg") 
     app_notification = Notify.Notification.new(summary, str(body), icon)
     app_notification.show()
     sys.exit(exit_status)
