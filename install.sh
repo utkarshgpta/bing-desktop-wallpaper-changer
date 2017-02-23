@@ -112,8 +112,7 @@ fi
 
 echo ""
 echo "Setting icons..."
-echo "Icon set as $ICON."
-sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg
+sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
 
 echo ""
 echo "Setting python script..."
