@@ -6,8 +6,8 @@ import os
 import re
 import sys
 
-# replace /path/to/Bing_Wallpapers with the actual path to the Bing_Wallpapers folder
-path_to_Bing_Wallpapers="/path/to/Bing_Wallpapers"
+# replace with the actual path to the bing-desktop-wallpaper-changer folder
+path_to_Bing_Wallpapers="/path/to/bing-desktop-wallpaper-changer"
 
 # wait computer internet connection
 os.system("sleep 10")
@@ -121,6 +121,11 @@ def set_gsetting(schema, key, value):
 def change_background(filename):
     set_gsetting('org.gnome.desktop.background', 'picture-uri',
                  get_file_uri(filename))
+
+def get_current_background_uri():
+    gsettings = Gio.Settings.new('org.gnome.desktop.background')
+    path = gsettings.get_string('picture-uri')
+    return path[6:]
 
 
 def change_screensaver(filename):
@@ -357,7 +362,7 @@ def main():
         download_path = get_download_path()
         init_dir(download_path)
         image_path = os.path.join(download_path, image_name)
-
+        
         if not os.path.isfile(image_path):
             urlretrieve(image_url, image_path)
             change_background(image_path)
@@ -368,18 +373,28 @@ def main():
             text = str(image_name) + " -- " + str(body) + "\n"
             with open(download_path + "/image-details.txt", "a+") as myfile:
                 myfile.write(text)
-        else:
+        
+        elif os.path.samefile(get_current_background_uri(), image_path):
             summary = 'Bing Wallpaper unchanged'
             body = ('%s already exists in Wallpaper directory' %
                     image_metadata.find("copyright").text.encode('utf-8'))
+        
+        else:
+            change_background(image_path)
+            change_screensaver(image_path)
+            summary = 'Wallpaper changed to current Bing wallpaper'
+            body = ('%s already exists in Wallpaper directory' %
+                    image_metadata.find("copyright").text.encode('utf-8'))
         check_limit()
+        
     except Exception as err:
         summary = 'Error executing %s' % app_name
         body = err
+        print(body)
         exit_status = 1
     
     os.chdir(path_to_Bing_Wallpapers)
-    icon = os.path.abspath("Bing.svg") 
+    icon = os.path.abspath("icon.svg") 
     app_notification = Notify.Notification.new(summary, str(body), icon)
     app_notification.show()
     sys.exit(exit_status)

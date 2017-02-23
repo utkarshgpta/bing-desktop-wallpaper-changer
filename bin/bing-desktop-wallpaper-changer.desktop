@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+X-GNOME-Autostart-enabled=true
+Name=BingWallpaperChanger
+Exec=/dev/null
+Comment=Automatically changes desktop wallpaper!
