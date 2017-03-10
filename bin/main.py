@@ -212,7 +212,7 @@ def get_bing_xml():
     # n = Number of images previous the day given by idx
     # mkt = Bing Market Area, see get_valid_bing_markets.
     market = get_market()
-    return "http://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=%s" % market
+    return "https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=%s" % market
 
 
 def get_screen_resolution_str():
