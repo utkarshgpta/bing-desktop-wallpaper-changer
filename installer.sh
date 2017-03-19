@@ -310,13 +310,12 @@ function install_add_startup {
 function install_set_icon {
   echo ""
   echo "Setting icons..."
-  echo "Icon set as $ICON."
-  sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg
+  sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
 }
 
 function install_set_python_script {
   echo ""
-  echo "Setting python script..."
+  echo "Setting scripts..."
   sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
   sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Replaced to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
@@ -440,4 +439,4 @@ case $i in
 esac
 done
 #### Ends normal tasks;
-#### BDWC Installer Copyright (C) 2017~  NKS (nks15)
+#### BDWC Installer :)
