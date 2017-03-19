@@ -1,10 +1,5 @@
-# Bing-Desktop-Wallpaper-Changer Shell Script Installer
-**Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!**
-
-**No need to add the script to your Startup list or edit main.py or copy paste it or etc..**
-
-**The Installer does everything for you!**
-
+# Bing Desktop Wallpaper Changer
+Automatically downloads and changes desktop wallpaper to Bing Photo of the Day.
 
 ## Synopsis
 Python Script for automatically downloading and changing the desktop wallpaper to Bing Photo of the day. The script runs automatically at the startup and works on GNU/Linux with Gnome. Works perfectly on Ubuntu 16.10.
@@ -36,25 +31,85 @@ To force your area to be 'bg-BG' (Bulgarian - Bulgaria).
 
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
-## Installation
+## Installer
+Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!
+No need to add the script to your Startup list or edit main.py or copy paste it or etc..
+The Installer does everything for you!
+
+### Using the Installer
+Starting with Installer version 2.0, the Installer works like a normal linux binary commands (for example, ls, cd, etc..)
+
+Note that the Installer can request root permissions(sudo) for doing some tasks
+
+### Preparing & Help
+
+When you first run the Installer, you need to prepare:
 
 1 Clone/download project
 
-2 Open a terminal and enter:
+2 Move into the downloaded project's directory
+
+3 Open a terminal and enter:
 ```
-chmod +x install.sh
-./install.sh
+chmod +x installer.sh
+./installer.sh --help
 ```
-3 DONE!
+4 Help screen will pop up on your Terminal - You can see the Installer's all Usages and Arguments
+
+### Using
+
+*INFO: Complete *Prepare & Help* before you use the Installer!*
+
+
+To install, use:
+```
+./installer.sh --install
+```
+and to uninstall, use:
+```
+./installer.sh --uninstall
+```
+
+Other usages is listed below:
+```
+Usage: installer.sh [OPTION]...
+       installer.sh [OPTION=*]...
+
+ --help       displays help about installer and tasks
+ --version    displays the installer version
+ --license    displays LICENSE
+ --readme     displays README.md
+ --detect-previous-install    detects previous Bing-Desktop-Wallpaper-Changer installation
+ --install    installs Bing-Desktop-Wallpaper-Changer
+ --uninstall  uninstalls Bing-Desktop-Wallpaper-Changer
+ --update     updates Bing-Desktop-Wallpaper-Changer (needs git)
+ --execute    runs Bing-Desktop-Wallpaper-Changer
+
+ For developers:
+ --enable-dev-mode    enables Developer Mode
+ --disable-dev-mode   disables Developer Mode
+ --run-function-or-command=*    runs internal functions or shell commands
+
+ Note that Developer Mode is disabled automatically when Installer restarts (because of security reasons),
+ those who wish to run developer tasks will always have to put --enable-dev-mode in front of OPTION.
+ For example, installer.sh --enable-dev-mode [DEVELOPER_OPTION/TASKS]
+
+ To directly run internal functions or shell commands, first you need to enable Dev Mode and use --run-function-or-command.
+ For example, installer.sh --enable-dev-mode --run-function-or-command=[YOUR COMMAND]
+
+ For more information, please visit:
+ GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>
+
+ And you know what? #This_Installer_can_moo!
+```
 
 ## To do
-- [ ] Ask user about: Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
-- [ ] Pull request and Add this to the official repo
+- [ ] When installing, Ask user about : Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
 
 *Any other suggestions welcome!*
 
 ## Author
-Utkarsh Gupta, nks15 and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
+Utkarsh Gupta and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer/network/members)
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).
