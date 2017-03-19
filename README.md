@@ -31,7 +31,7 @@ To force your area to be 'bg-BG' (Bulgarian - Bulgaria).
 
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
-## Bing-Desktop-Wallpaper-Changer Installer
+## Installer
 Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!
 No need to add the script to your Startup list or edit main.py or copy paste it or etc..
 The Installer does everything for you!
@@ -83,7 +83,7 @@ Usage: installer.sh [OPTION]...
  --install    installs Bing-Desktop-Wallpaper-Changer
  --uninstall  uninstalls Bing-Desktop-Wallpaper-Changer
  --update     updates Bing-Desktop-Wallpaper-Changer (needs git)
- --execute    runs $UPNAME
+ --execute    runs Bing-Desktop-Wallpaper-Changer
 
  For developers:
  --enable-dev-mode    enables Developer Mode
