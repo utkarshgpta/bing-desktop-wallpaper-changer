@@ -10,6 +10,7 @@
 ## Variable definition
 NAME=bing-desktop-wallpaper-changer
 UPNAME=Bing-Desktop-Wallpaper-Changer
+STNAME=BDWC
 TERMNAME=bingwallpaper
 LINKTO=/usr/bin
 AUTOSTART=$HOME/.config/autostart
@@ -17,8 +18,8 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="Version 2.0"
-INSTALLER_FULL_NAME="$UPNAME Installer ($INSTALLER_VERSION)"
+INSTALLER_VERSION="v3"
+INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 # For security reasons, Developer Mode has to be disabled automatically
 INSTALLER_DEVELOPER_MODE=false
 # Required to be installed in order to run main.py
@@ -94,7 +95,7 @@ function info_help {
 
 function info_version {
   # Prints version info
-  echo "BDWC Installer $INSTALLER_VERSION"
+  echo "$INSTALLER_FULL_NAME"
   echo "Installer Copyright (C) 2017~  NKS (nks15)"
   echo ""
   echo "$UPNAME"
