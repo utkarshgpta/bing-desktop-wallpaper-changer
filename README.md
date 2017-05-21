@@ -2,7 +2,7 @@
 Automatically downloads and changes desktop wallpaper to Bing Photo of the Day.
 
 ## Synopsis
-Python Script for automatically downloading and changing the desktop wallpaper to Bing Photo of the day. The script runs automatically at the startup and works on GNU/Linux with Gnome. Works perfectly on Ubuntu 16.10.
+Python Script for automatically downloading and changing the desktop wallpaper to Bing Photo of the day. The script runs automatically at the startup and works on GNU/Linux with Gnome. Works perfectly on Ubuntu.
 
 ## What does it do?
 It grabs images exactly the same way *Microsoft* uses to put it up on its page - using **XML/RSS/JSON**. You can't scrape the website directly. After searching on the internet for long I found out the link - *http://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=en-US*
@@ -36,29 +36,28 @@ Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!
 No need to add the script to your Startup list or edit main.py or copy paste it or etc..
 The Installer does everything for you!
 
-### Using the Installer
-Starting with Installer version 2.0, the Installer works like a normal linux binary commands (for example, ls, cd, etc..)
-
-Note that the Installer can request root permissions(sudo) for doing some tasks
+### Installer 2.0
+Starting with Installer version 2.0, the Installer works like a normal GNU/Linux binary commands (for example, ls, cd, etc..).
+Note that the Installer can request root permissions(sudo) for doing some tasks!
 
 ### Preparing & Help
 
-When you first run the Installer, you need to prepare:
+When you first run the Installer, you need to:
 
-1 Clone/download project
+1. Clone/download project
 
-2 Move into the downloaded project's directory
+2. Move into the downloaded project's directory
 
-3 Open a terminal and enter:
+3. Open a terminal and enter:
 ```
 chmod +x installer.sh
 ./installer.sh --help
 ```
-4 Help screen will pop up on your Terminal - You can see the Installer's all Usages and Arguments
+4. Help screen will pop up on your Terminal - You can see the Installer's all Usages and Arguments
 
 ### Using
 
-*INFO: Complete *Prepare & Help* before you use the Installer!*
+*INFO: Complete *Preparing & Help* before you use the Installer!*
 
 
 To install, use:
@@ -103,8 +102,14 @@ Usage: installer.sh [OPTION]...
  And you know what? #This_Installer_can_moo!
 ```
 
+P.S. The Installer has a easter egg! (Any new easter egg ideas is welcome) Try:
+```
+./installer.sh --enable-dev-mode --run-function-or-command=easter_egg
+```
+
 ## To do
 - [ ] When installing, Ask user about : Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
+- [ ] Installer support for *rpm*-using distros
 
 *Any other suggestions welcome!*
 
