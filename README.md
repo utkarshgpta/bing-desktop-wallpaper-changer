@@ -46,7 +46,7 @@ When you first run the Installer, you need to:
 
 1. Clone/download project
 
-2. Move into the downloaded project's directory
+2. Move (cd) into the downloaded project's directory
 
 3. Open a terminal and enter:
 ```
@@ -56,7 +56,7 @@ chmod +x installer.sh
 
 ### Help
 
-*INFO: Complete *Prepare* before you use the Installer!*
+*INFO: Complete **Prepare** before you use the Installer!*
 
 
 To install, use:
@@ -109,7 +109,7 @@ P.S. The Installer has a easter egg! (Any new easter egg ideas is welcome) Try:
 
 ## To do
 - [ ] When installing, Ask user about : Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
-- [*] Installer support for *rpm*-using distros (50% done - added support, but it will probably not work. needs feedback)
+- [ ] Installer support for *rpm*-using distros (50% done - added support, but it will probably not work. needs feedback)
 
 *Any other suggestions welcome!*
 
