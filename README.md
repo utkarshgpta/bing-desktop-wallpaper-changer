@@ -1,4 +1,4 @@
-# bing-desktop-wallpaper-changer
+# Bing Desktop Wallpaper Changer
 Automatically downloads and changes desktop wallpaper to Bing Photo of the Day.
 
 ## Synopsis
@@ -31,107 +31,80 @@ To force your area to be 'bg-BG' (Bulgarian - Bulgaria).
 
 All the wallpapers are stored in '**/home/[user]/Pictures/BingWallpapers/**'
 
-## Installation
+## Installer
+Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!
+No need to add the script to your Startup list or edit main.py or copy paste it or etc..
+The Installer does everything for you!
 
-Clone/download project (or just the main.py file)
+### Using the Installer
+Starting with Installer version 2.0, the Installer works like a normal linux binary commands (for example, ls, cd, etc..)
 
-#### Autostart With gnome-session-properties
-Then add the script as a startup application. Type in terminal
+Note that the Installer can request root permissions(sudo) for doing some tasks
 
-```shell
-gnome-session-properties
+### Preparing & Help
+
+When you first run the Installer, you need to prepare:
+
+1 Clone/download project
+
+2 Move into the downloaded project's directory
+
+3 Open a terminal and enter:
+```
+chmod +x installer.sh
+./installer.sh --help
+```
+4 Help screen will pop up on your Terminal - You can see the Installer's all Usages and Arguments
+
+### Using
+
+*INFO: Complete *Prepare & Help* before you use the Installer!*
+
+
+To install, use:
+```
+./installer.sh --install
+```
+and to uninstall, use:
+```
+./installer.sh --uninstall
 ```
 
-then add a startup program as:
-```plaintext
-Name: BingWallpaperChanger
-Command: python /path/to/main.py
-Comment: Automatically changes desktop wallpaper!
+Other usages is listed below:
 ```
+Usage: installer.sh [OPTION]...
+       installer.sh [OPTION=*]...
 
-![gnome-session-properties](startup.png "gnome-session-properties")
+ --help       displays help about installer and tasks
+ --version    displays the installer version
+ --license    displays LICENSE
+ --readme     displays README.md
+ --detect-previous-install    detects previous Bing-Desktop-Wallpaper-Changer installation
+ --install    installs Bing-Desktop-Wallpaper-Changer
+ --uninstall  uninstalls Bing-Desktop-Wallpaper-Changer
+ --update     updates Bing-Desktop-Wallpaper-Changer (needs git)
+ --execute    runs Bing-Desktop-Wallpaper-Changer
 
-#### Autostart with ~/.config/autostart
-If you run gnome 3 from Fedora, you have to create the file
+ For developers:
+ --enable-dev-mode    enables Developer Mode
+ --disable-dev-mode   disables Developer Mode
+ --run-function-or-command=*    runs internal functions or shell commands
 
-/home/[user]/.config/autostart/bing-desktop-wallpaper-changer.desktop
+ Note that Developer Mode is disabled automatically when Installer restarts (because of security reasons),
+ those who wish to run developer tasks will always have to put --enable-dev-mode in front of OPTION.
+ For example, installer.sh --enable-dev-mode [DEVELOPER_OPTION/TASKS]
 
-the file contents look like:
+ To directly run internal functions or shell commands, first you need to enable Dev Mode and use --run-function-or-command.
+ For example, installer.sh --enable-dev-mode --run-function-or-command=[YOUR COMMAND]
 
+ For more information, please visit:
+ GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>
 
-```ini
-[Desktop Entry]
-Type=Application
-Terminal=false
-Exec=python /path/to/bing-desktop-wallpaper-changer/main.py
-Name=Bing Desktop Wallpaper Changer
+ And you know what? #This_Installer_can_moo!
 ```
-
-Replace [user] with your actual user name and /path/to/ with your actual
-parent directory for the bing-desktop-wallpaper-changer directory.
-
-#### Start with timer
-
-A more elegant way to setup this script is using systemd.timer or cron job.
-Since Bing only change their photo of the day every 24 hours, I will be optimize if you set up a timer unit to run exactly at the time new photo becomes available. To do that, go to `~/.config/systemd/user` and create two files:
-
-`bing.service`
-```ini
-[Unit]
-Description=Bing desktop wallpaper changer
-
-[Service]
-ExecStart=/path/to/main.py
-```
-
-`bing.timer`
-```ini
-[Unit]
-Description=Bing desktop wallpaper changer
-
-[Timer]
-OnBootSec=20
-OnUnitActiveSec=1d
-OnCalendar=*-*-* 15:00:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-```
-Those two files must have the same name, differ only in the extension part (.service vs .timer). The `bing.service` file contain t he `ExecStart` option which specify the comman to execute, replace it to suit your installation.
-`bing.timer` file will specify when would `bing.service` be executed. In the example above the service will run if either of those 3 conditions are met:
-
-1. It's 20 seconds after the system boot up, specified by option `OnBootSec=20`, you can increase this number  to your liking.
-2. It's 24 hours since the last time the service run, specified by option `OnUnitActiveSec=1d`
-3. It's 3:00pm, specified by option `OnCalendar=*-*-* 15:00:00`, which is around the time bing change their photo in my local time. 
-You can edit, add or remove thos conditon to your liking. If you are not using systemd you could use any scheduler for the task, like cron for example.
-
-Afer finish editing those file, activate the service with the following command
-```shell
-systemctl --user enable bing.timer
-systemctl --user start bing.timer
-```
-
-
-## Limit the size of all downloaded wallpapers
-The application by default keep 100MiB worth of wallpapers, old wallpaper will be delete upon preserve this disk space constraint. To raise limit, edit config file 
-```
-~/.config/bing-desktop-wallpaper-changer/config.ini
-```
-and set option 
-```
-dir_max_size
-```
-to your liking. set it to zero or nonegative will keep an unlimit amount of downloaded wallpaper
-
 
 ## To do
-- [ ] Create a python package.
-- [x] Set the wallpaper according to the current screen size.
-- [x] Support for dual monitors
-- [x] Added as a Debian package in another branch
-- [x] Store the details about the previous wallpapers (viz. date, filename, brief description) in an XML file so that the user can see that later too.
-- [x] Permitting a limited number of wallpapers to be stored in the directory (disk space constraints)
+- [ ] When installing, Ask user about : Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
 
 *Any other suggestions welcome!*
 
