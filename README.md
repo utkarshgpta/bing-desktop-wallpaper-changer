@@ -36,11 +36,11 @@ Fully automated Bing-Desktop-Wallpaper-Changer installation and configuration!
 No need to add the script to your Startup list or edit main.py or copy paste it or etc..
 The Installer does everything for you!
 
-### Installer 2.0
-Starting with Installer version 2.0, the Installer works like a normal GNU/Linux binary commands (for example, ls, cd, etc..).
+### Information
+Starting with Installer version 2.0+, the Installer works like a normal GNU/Linux binary commands (for example, ls, cd, etc..).
 Note that the Installer can request root permissions(sudo) for doing some tasks!
 
-### Preparing & Help
+### Prepare
 
 When you first run the Installer, you need to:
 
@@ -51,13 +51,12 @@ When you first run the Installer, you need to:
 3. Open a terminal and enter:
 ```
 chmod +x installer.sh
-./installer.sh --help
 ```
-4. Help screen will pop up on your Terminal - You can see the Installer's all Usages and Arguments
+4. All done! You can learn how to use the installer in *Help* (below).
 
-### Using
+### Help
 
-*INFO: Complete *Preparing & Help* before you use the Installer!*
+*INFO: Complete *Prepare* before you use the Installer!*
 
 
 To install, use:
@@ -69,47 +68,48 @@ and to uninstall, use:
 ./installer.sh --uninstall
 ```
 
-Other usages is listed below:
+All Usages & Arguments is listed below.
+(The following is equivalent to using ./installer.sh --help):
 ```
 Usage: installer.sh [OPTION]...
        installer.sh [OPTION=*]...
 
- --help       displays help about installer and tasks
- --version    displays the installer version
- --license    displays LICENSE
- --readme     displays README.md
- --detect-previous-install    detects previous Bing-Desktop-Wallpaper-Changer installation
- --install    installs Bing-Desktop-Wallpaper-Changer
- --uninstall  uninstalls Bing-Desktop-Wallpaper-Changer
- --update     updates Bing-Desktop-Wallpaper-Changer (needs git)
- --execute    runs Bing-Desktop-Wallpaper-Changer
+ --help              displays help about the Installer and tasks
+ --version           displays the Installer version
+ --license           displays LICENSE
+ --readme            displays README.md
+ --detect-install    detects previous $UPNAME installation
+ --install           installs $UPNAME
+ --uninstall         uninstalls $UPNAME
+ --update            updates $UPNAME (needs git)
+ --execute           runs $UPNAME
 
  For developers:
- --enable-dev-mode    enables Developer Mode
- --disable-dev-mode   disables Developer Mode
- --run-function-or-command=*    runs internal functions or shell commands
+ --enable-devmode    enables Developer Mode
+ --disable-devmode   disables Developer Mode
+ --run-installer-command=*    runs internal functions or shell commands
 
- Note that Developer Mode is disabled automatically when Installer restarts (because of security reasons),
- those who wish to run developer tasks will always have to put --enable-dev-mode in front of OPTION.
- For example, installer.sh --enable-dev-mode [DEVELOPER_OPTION/TASKS]
+ Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),
+ those who wish to run developer tasks will always have to put --enable-devmode in front of OPTION.
+ For example, installer.sh --enable-devmode [DEVELOPER_OPTION/TASKS]
 
- To directly run internal functions or shell commands, first you need to enable Dev Mode and use --run-function-or-command.
- For example, installer.sh --enable-dev-mode --run-function-or-command=[YOUR COMMAND]
+ To directly run internal functions or shell commands, first you need to enable Developer Mode and use --run-installer-command.
+ For example, installer.sh --enable-devmode --run-installer-command=[YOUR COMMAND]
 
  For more information, please visit:
  GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>
 
- And you know what? #This_Installer_can_moo!
+ And you know what? #This_Installer_can_moo (Try to find the Easter Egg!)
 ```
 
 P.S. The Installer has a easter egg! (Any new easter egg ideas is welcome) Try:
 ```
-./installer.sh --enable-dev-mode --run-function-or-command=easter_egg
+./installer.sh --enable-devmode --run-installer-command=easter_egg
 ```
 
 ## To do
 - [ ] When installing, Ask user about : Schedule with crontab, Limit the size of all downloaded wallpapers, Start with timer
-- [ ] Installer support for *rpm*-using distros
+- [*] Installer support for *rpm*-using distros (50% done - added support, but it will probably not work. needs feedback)
 
 *Any other suggestions welcome!*
 

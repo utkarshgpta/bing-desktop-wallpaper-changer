@@ -4,7 +4,7 @@
 # Bing-Desktop-Wallpaper-Changer
 # BDWC Installer Copyright (C) 2017~  NKS (nks15)
 #
-#### Starts startup task;
+#### Starts Startup task.
 #### INFO: DO NOT EDIT!
 ####
 ## Variable definition
@@ -18,7 +18,7 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3_beta1"
+INSTALLER_VERSION="v3_beta2"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 INSTALLER_NAME="$STNAME Installer"
 # For security reasons, Developer Mode has to be disabled automatically
@@ -30,9 +30,9 @@ INSTALLER_NEEDED_REQUIREMENTS="python-lxml python-bs4 python-gi python-gi-cairo"
 # This is a dummy value and will make errors if not refreshed, so use detect_package_mgr later!
 INSTALLER_PACKAGE_MANAGER=unknown
 ####
-#### Ends Startup task;
+#### Ends Startup task.
 ####
-#### Starts Function definition;
+#### Starts Function definition.
 ####
 function info_license {
   # Prints license
@@ -69,27 +69,27 @@ function info_help {
   echo "Usage: installer.sh [OPTION]..."
   echo "       installer.sh [OPTION=*]..."
   echo ""
-  echo " --help       displays help about the Installer and tasks"
-  echo " --version    displays the Installer version"
-  echo " --license    displays LICENSE"
-  echo " --readme     displays README.md"
-  echo " --detect-previous-install    detects previous $UPNAME installation"
-  echo " --install    installs $UPNAME"
-  echo " --uninstall  uninstalls $UPNAME"
-  echo " --update     updates $UPNAME (needs git)"
-  echo " --execute    runs $UPNAME"
+  echo " --help              displays help about the Installer and tasks"
+  echo " --version           displays the Installer version"
+  echo " --license           displays LICENSE"
+  echo " --readme            displays README.md"
+  echo " --detect-install    detects previous $UPNAME installation"
+  echo " --install           installs $UPNAME"
+  echo " --uninstall         uninstalls $UPNAME"
+  echo " --update            updates $UPNAME (needs git)"
+  echo " --execute           runs $UPNAME"
   echo ""
   echo " For developers:"
   echo " --enable-devmode    enables Developer Mode"
   echo " --disable-devmode   disables Developer Mode"
-  echo " --run-function-or-command=*    runs internal functions or shell commands"
+  echo " --run-installer-command=*    runs internal functions or shell commands"
   echo ""
   echo " Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),"
   echo " those who wish to run developer tasks will always have to put --enable-devmode in front of OPTION."
   echo " For example, installer.sh --enable-devmode [DEVELOPER_OPTION/TASKS]"
   echo ""
-  echo " To directly run internal functions or shell commands, first you need to enable Dev Mode and use --run-function-or-command."
-  echo " For example, installer.sh --enable-devmode --run-function-or-command=[YOUR COMMAND]"
+  echo " To directly run internal functions or shell commands, first you need to enable Developer Mode and use --run-installer-command."
+  echo " For example, installer.sh --enable-devmode --run-installer-command=[YOUR COMMAND]"
   echo ""
   echo " For more information, please visit:"
   echo " GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>"
@@ -148,6 +148,8 @@ function uninstall_main {
 function update_main {
   # Updates local BDWC using git
   # method used: https://help.github.com/articles/syncing-a-fork/
+  #
+  # For Developers!
   echo "Updating local $UPNAME..."
   echo " Adding remote..."
   git remote add upstream https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer.git
@@ -221,15 +223,15 @@ function detect_previous_install {
 function find_error {
   # Find errors and alerts them
   if [ "$(ls | grep LICENSE)" == "" ]; then
-    info_error "1 (File not found)"
+    info_error "1 (License file not found)"
   fi
 
   if [ "$(ls | grep bin)" == "" ]; then
-    info_error "2 (Folder not found)"
+    info_error "2 (Binary folder not found)"
   fi
 
   if [ $INSTALLER_PACKAGE_MANAGER == unknown ]; then
-    info_error "5 (Unknown package manager)"
+    info_error "3 (Unknown package manager. Please report to GitHub!)"
   fi
 }
 
@@ -241,6 +243,7 @@ function easter_egg {
     apt-get moo
   else
     echo "Moooooooooooooo"
+    echo "Any new Easter Egg ideas is welcome"
   fi
 }
 
@@ -267,8 +270,8 @@ function ask_config {
   echo ""
 
   echo "Where do you want to install $UPNAME?"
-  echo " - Entering 'opt' or leaving input blank will install in /opt/$NAME"
-  echo " - Entering 'home' will install in $HOME/$NAME"
+  echo "   Entering 'opt' or leaving input blank will install in /opt/$NAME"
+  echo "   Entering 'home' will install in $HOME/$NAME"
   echo -n "  Install $UPNAME in (opt/home)? : "
   read answer
   if echo "$answer" | grep -iq "^home" ;then
@@ -406,9 +409,9 @@ function install_main {
   info_finish
 }
 ####
-#### Ends Function definition;
+#### Ends Function definition.
 ####
-#### Starts normal tasks;
+#### Starts normal tasks.
 ####
 # Prints main info
 info_main
@@ -498,5 +501,5 @@ case $i in
 esac
 done
 #### Ends normal tasks;
-####
-#### BDWC Installer :)
+#
+# BDWC Installer :)
