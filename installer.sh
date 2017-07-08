@@ -1,5 +1,5 @@
 #!/bin/bash
-# INFO: PLEASE USE BASH FOR RUNNING THIS INSTALLER
+# INFO: Please use Bash to run this Installer
 #
 # Bing-Desktop-Wallpaper-Changer
 # BDWC Installer Copyright (C) 2017~  NKS (nks15)
@@ -18,13 +18,17 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3"
+INSTALLER_VERSION="v3_beta1"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
+INSTALLER_NAME="$STNAME Installer"
 # For security reasons, Developer Mode has to be disabled automatically
 INSTALLER_DEVELOPER_MODE=false
 # Required to be installed in order to run main.py
 # This list was in 'requirements.txt' before we merged into the Installer
 INSTALLER_NEEDED_REQUIREMENTS="python-lxml python-bs4 python-gi python-gi-cairo"
+# The system's Package Manager
+# This is a dummy value and will make errors if not refreshed, so use detect_package_mgr later!
+INSTALLER_PACKAGE_MANAGER=unknown
 ####
 #### Ends Startup task;
 ####
@@ -65,8 +69,8 @@ function info_help {
   echo "Usage: installer.sh [OPTION]..."
   echo "       installer.sh [OPTION=*]..."
   echo ""
-  echo " --help       displays help about installer and tasks"
-  echo " --version    displays the installer version"
+  echo " --help       displays help about the Installer and tasks"
+  echo " --version    displays the Installer version"
   echo " --license    displays LICENSE"
   echo " --readme     displays README.md"
   echo " --detect-previous-install    detects previous $UPNAME installation"
@@ -76,21 +80,21 @@ function info_help {
   echo " --execute    runs $UPNAME"
   echo ""
   echo " For developers:"
-  echo " --enable-dev-mode    enables Developer Mode"
-  echo " --disable-dev-mode   disables Developer Mode"
+  echo " --enable-devmode    enables Developer Mode"
+  echo " --disable-devmode   disables Developer Mode"
   echo " --run-function-or-command=*    runs internal functions or shell commands"
   echo ""
-  echo " Note that Developer Mode is disabled automatically when Installer restarts (because of security reasons),"
-  echo " those who wish to run developer tasks will always have to put --enable-dev-mode in front of OPTION."
-  echo " For example, installer.sh --enable-dev-mode [DEVELOPER_OPTION/TASKS]"
+  echo " Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),"
+  echo " those who wish to run developer tasks will always have to put --enable-devmode in front of OPTION."
+  echo " For example, installer.sh --enable-devmode [DEVELOPER_OPTION/TASKS]"
   echo ""
   echo " To directly run internal functions or shell commands, first you need to enable Dev Mode and use --run-function-or-command."
-  echo " For example, installer.sh --enable-dev-mode --run-function-or-command=[YOUR COMMAND]"
+  echo " For example, installer.sh --enable-devmode --run-function-or-command=[YOUR COMMAND]"
   echo ""
   echo " For more information, please visit:"
   echo " GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>"
   echo ""
-  echo " And you know what? #This_Installer_can_moo!"
+  echo " And you know what? #This_Installer_can_moo (Try to find the Easter Egg!)"
 }
 
 function info_version {
@@ -133,7 +137,7 @@ function info_install {
 function uninstall_main {
   # Completely removes/uninstalles Bing-Desktop-Wallpaper-Changer in this host system
   if [ "$1" != "--no-echo-text" ]; then
-    echo "Completely removing Bing-Desktop-Wallpaper-Changer in this system ($HOSTNAME)..."
+    echo "Completely removing Bing-Desktop-Wallpaper-Changer in $HOSTNAME..."
   fi
   sudo rm -rfv $HOME/$NAME
   sudo rm -rfv /opt/$NAME
@@ -157,7 +161,33 @@ function update_main {
   git merge upstream/master
   # Finish
   info_finish
-  echo "Now you can use 'installer.sh --install' to finish installing to this system ($HOSTNAME)"
+  echo "Now you can use 'installer.sh --install' to finish installing to $HOSTNAME"
+}
+
+function detect_package_mgr {
+  # Detect the system's package manager
+  if [ "$1" == "--verbose" ]; then
+    echo "Detecting package manager..."
+  fi
+
+  if [ $(which apt-get) != "" ]; then
+    INSTALLER_PACKAGE_MANAGER=apt-get
+  else
+    if [ $(which rpm) != "" ]; then
+      INSTALLER_PACKAGE_MANAGER=rpm
+    else
+      if [ $(which pip) != "" ]; then
+        INSTALLER_PACKAGE_MANAGER=pip
+      else
+        INSTALLER_PACKAGE_MANAGER=unknown
+      fi
+    fi
+  fi
+
+  if [ "$1" == "--verbose" ]; then
+    echo ""
+    echo "Package manager: $INSTALLER_PACKAGE_MANAGER"
+  fi
 }
 
 function detect_previous_install {
@@ -188,26 +218,41 @@ function detect_previous_install {
   fi
 }
 
-function detect_conflict {
-  info_error "7 (Undefined)"
+function find_error {
+  # Find errors and alerts them
+  if [ "$(ls | grep LICENSE)" == "" ]; then
+    info_error "1 (File not found)"
+  fi
+
+  if [ "$(ls | grep bin)" == "" ]; then
+    info_error "2 (Folder not found)"
+  fi
+
+  if [ $INSTALLER_PACKAGE_MANAGER == unknown ]; then
+    info_error "5 (Unknown package manager)"
+  fi
 }
 
 function easter_egg {
-  # Currently it's apt-get moo; Any new ideas is welcome
-  # "fortune | cowsay" looks good too
-  apt-get moo
+  # Easter Egg!
+  # Any new ideas is welcome
+  # * "fortune | cowsay" looks good too
+  if [ "$INSTALLER_PACKAGE_MANAGER" == apt-get ]; then
+    apt-get moo
+  else
+    echo "Moooooooooooooo"
+  fi
 }
 
 function ask_sudo {
   # Asks user to grant Superuser permission
-  # sudo make me a sandwich
   echo "Asking sudo privilege..."
-  echo " We need Superuser permissions to continue and run this task."
-  echo " We promise, We will never use Superuser permissions to do bad things!"
+  echo " $INSTALLER_NAME needs Superuser permissions to continue and run this task."
+  echo " We will never use Superuser permissions to do bad things!"
   echo ""
   
   # Check if root permission is granted
-  sudo echo " Sudo privilege status:"
+  sudo echo " Root privilege status:"
   INSTALLER_SUDO_PRIVILEGE=$(sudo id -u)
 
   if [ $INSTALLER_SUDO_PRIVILEGE == 0 ]; then
@@ -222,14 +267,16 @@ function ask_config {
   echo ""
 
   echo "Where do you want to install $UPNAME?"
-  echo "  -Entering 'opt' or leaving input blank will install in /opt/$NAME"
-  echo "  -Entering 'home' will install in $HOME/$NAME"
+  echo " - Entering 'opt' or leaving input blank will install in /opt/$NAME"
+  echo " - Entering 'home' will install in $HOME/$NAME"
   echo -n "  Install $UPNAME in (opt/home)? : "
   read answer
   if echo "$answer" | grep -iq "^home" ;then
       INSTALLPATH=$HOME/$NAME
+      INSTALLPATH_SMALL=$HOME
   else
       INSTALLPATH=/opt/$NAME
+      INSTALLPATH_SMALL=/opt
   fi
 
   echo ""
@@ -261,23 +308,23 @@ function ask_config {
   # TODO : Add a lot of options
 }
 
-function install_system {
-  # Time to find errors
-  if [ "$(ls | grep LICENSE)" == "" ]; then
-      info_error "1 (File not found)"
-  fi
-  if [ "$(ls | grep bin)" == "" ]; then
-      info_error "2 (Folder not found)"
-  fi
-
+function install_packages {
   echo ""
-  echo "In order to prevent errors and run $UPNAME, we need to install $INSTALLER_NEEDED_REQUIREMENTS"
-  echo "You only need to install them once."
-  sudo apt-get install $INSTALLER_NEEDED_REQUIREMENTS
+  echo "In order to prevent errors and run $UPNAME, we need to install some packages."
+  echo " Using $INSTALLER_PACKAGE_MANAGER to install..."
+  sudo $INSTALLER_PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS
+}
 
+function install_system {
   echo ""
   echo "Installing in $INSTALLPATH..."
-  mkdir $INSTALLPATH
+
+  if [ $INSTALLPATH_SMALL == $HOME ]; then
+    mkdir -v $INSTALLPATH
+  else
+    sudo mkdir -v $INSTALLPATH
+  fi
+
   sudo cp -Rvf * $INSTALLPATH
   # Restore main.py to original directory
   sudo mv -vf $INSTALLPATH/bin/main.py $INSTALLPATH/main.py
@@ -288,8 +335,8 @@ function install_symlink {
       echo ""
       echo "Creating symlink for easy execution..."
 
-      sudo ln -s $INSTALLPATH/main.py $LINKTO/$TERMNAME
-      echo "$(ls $INSTALLPATH/main.py) symlinked in $(ls $LINKTO/$TERMNAME)"
+      sudo rm -v $LINKTO/$TERMNAME
+      sudo ln -sv $INSTALLPATH/main.py $LINKTO/$TERMNAME
   fi
 }
 
@@ -299,12 +346,13 @@ function install_add_startup {
       echo "Adding $NAME in Startup Application..."
 
       if [ $PYSYMLINK == true ]; then
-  	sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
+  	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
       else
-	sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
+	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
       fi
 
-      cp -vf $INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop $AUTOSTART/bing-desktop-wallpaper-changer.desktop
+      sudo mkdir -pv $AUTOSTART
+      sudo cp -vf $INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop $AUTOSTART/bing-desktop-wallpaper-changer.desktop
   fi
 }
 
@@ -317,8 +365,8 @@ function install_set_icon {
 function install_set_python_script {
   echo ""
   echo "Setting scripts..."
-  sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
-  sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Replaced to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
+  sudo sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
+  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Replaced to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
 
 function install_remove_unneeded {
@@ -347,6 +395,7 @@ function install_main {
   echo ""
   ask_config
   info_install
+  install_packages
   install_system
   install_symlink
   install_add_startup
@@ -360,8 +409,17 @@ function install_main {
 #### Ends Function definition;
 ####
 #### Starts normal tasks;
+####
 # Prints main info
 info_main
+
+# Detect package manager
+#  Package manager detection is here (and not in install_main)
+#  because many tasks rely on this (like Easter Egg)
+detect_package_mgr
+
+# Try to find errors
+find_error
 
 # Check if arguments is smaller then 1
 if [ "$#" -lt 1 ]; then
@@ -389,7 +447,7 @@ case $i in
     info_readme
     shift
     ;;
-    --detect-previous-install)
+    --detect-install)
     detect_previous_install
     shift
     ;;
@@ -413,24 +471,24 @@ case $i in
     execute
     shift
     ;;
-    --enable-dev-mode)
+    --enable-devmode)
     INSTALLER_DEVELOPER_MODE=true
     shift
     ;;
-    --disable-dev-mode)
+    --disable-devmode)
     INSTALLER_DEVELOPER_MODE=false
     shift
     ;;
-    --run-function-or-command=*)
+    --run-installer-command=*)
     FUNCTION_NAME="${i#*=}"
     if [ $INSTALLER_DEVELOPER_MODE == true ]; then
       echo "- Hello, Developer $USER on Host $HOSTNAME -"
       echo "INSTALLER_DEVELOPER_MODE = $INSTALLER_DEVELOPER_MODE"
-      echo "FUNCTION_NAME = $FUNCTION_NAME"
+      echo "FUNCTION_NAME (COMMAND) = $FUNCTION_NAME"
       echo ""
       $FUNCTION_NAME
     else
-      info_alert "Developer Mode is disabled" "--enable-dev-mode" "to use developer tasks"
+      info_alert "Developer Mode is disabled" "--enable-devmode" "to use developer tasks"
     fi
     shift
     ;;
@@ -440,4 +498,5 @@ case $i in
 esac
 done
 #### Ends normal tasks;
+####
 #### BDWC Installer :)
