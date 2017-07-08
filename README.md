@@ -78,11 +78,11 @@ Usage: installer.sh [OPTION]...
  --version           displays the Installer version
  --license           displays LICENSE
  --readme            displays README.md
- --detect-install    detects previous $UPNAME installation
- --install           installs $UPNAME
- --uninstall         uninstalls $UPNAME
- --update            updates $UPNAME (needs git)
- --execute           runs $UPNAME
+ --detect-install    detects previous Bing-Desktop-Wallpaper-Changer installation
+ --install           installs Bing-Desktop-Wallpaper-Changer
+ --uninstall         uninstalls Bing-Desktop-Wallpaper-Changer
+ --update            updates Bing-Desktop-Wallpaper-Changer (needs git)
+ --execute           runs Bing-Desktop-Wallpaper-Changer
 
  For developers:
  --enable-devmode    enables Developer Mode
