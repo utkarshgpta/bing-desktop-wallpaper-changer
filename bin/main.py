@@ -118,15 +118,25 @@ def set_gsetting(schema, key, value):
     gsettings.apply()
 
 
-def change_background(filename):
+def change_background_gnome(filename):
     set_gsetting('org.gnome.desktop.background', 'picture-uri',
-                 get_file_uri(filename))
+        get_file_uri(filename))
 
-def get_current_background_uri():
+def change_background_cinnamon(filename):
+    set_gsetting('org.cinnamon.desktop.background', 'picture-uri',
+        get_file_uri(filename))
+
+
+
+def get_current_background_gnome_uri():
     gsettings = Gio.Settings.new('org.gnome.desktop.background')
     path = gsettings.get_string('picture-uri')
     return path[6:]
 
+def get_current_background_cinnamon_uri():
+    gsettings = Gio.Settings.new('org.cinnamon.desktop.background')
+    path = gsettings.get_string('picture-uri')
+    return path[6:]
 
 def change_screensaver(filename):
     set_gsetting('org.gnome.desktop.screensaver', 'picture-uri',
@@ -365,7 +375,10 @@ def main():
         
         if not os.path.isfile(image_path):
             urlretrieve(image_url, image_path)
-            change_background(image_path)
+            try:
+                change_background_gnome(image_path)
+            except:
+                change_background_cinnamon(image_path)
             change_screensaver(image_path)
             summary = 'Bing Wallpaper updated successfully'
             body = image_metadata.find("copyright").text.encode('utf-8')
@@ -380,7 +393,10 @@ def main():
                     image_metadata.find("copyright").text.encode('utf-8'))
         
         else:
-            change_background(image_path)
+            try:
+                change_background_gnome(image_path)
+            except:
+                change_background_cinnamon(image_path)
             change_screensaver(image_path)
             summary = 'Wallpaper changed to current Bing wallpaper'
             body = ('%s already exists in Wallpaper directory' %
