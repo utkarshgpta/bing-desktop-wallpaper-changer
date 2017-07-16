@@ -1,0 +1,8 @@
+title: Bing Desktop Wallpaper Changer
+description: Python Script that automatically changes desktop wallpaper to Bing Photo of the Day for Linux with Gnome.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-hacker
+
+gems:
+  - jekyll-mentions
