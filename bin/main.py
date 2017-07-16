@@ -138,6 +138,15 @@ def get_current_background_cinnamon_uri():
     path = gsettings.get_string('picture-uri')
     return path[6:]
 
+def get_current_background_uri():
+    source = Gio.SettingsSchemaSource.get_default()
+    cinnamon_exists = source.lookup('org.cinnamon.desktop.background', True)
+    if cinnamon_exists:
+        current = get_current_background_cinnamon_uri()
+    else:
+        current = get_current_background_gnome_uri()
+    return current
+
 def change_screensaver(filename):
     set_gsetting('org.gnome.desktop.screensaver', 'picture-uri',
                  get_file_uri(filename))
