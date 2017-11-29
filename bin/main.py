@@ -18,7 +18,7 @@ try:  # try python 3 import
     from configparser import ConfigParser
 except ImportError:  # fall back to python2
     from urllib import urlretrieve
-    from urllib2 import urlopen
+    from urllib2 import urlopen  
     from ConfigParser import ConfigParser
 
 import xml.etree.ElementTree as ET
