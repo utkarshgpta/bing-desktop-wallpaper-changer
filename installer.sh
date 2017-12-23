@@ -13,12 +13,12 @@ UPNAME=Bing-Desktop-Wallpaper-Changer
 STNAME=BDWC
 TERMNAME=bingwallpaper
 LINKTO=/usr/bin
-AUTOSTART=$HOME/.config/autostart
+AUTOSTART=$HOME/.config/autOStart
 ## BDWC variable definition
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3_beta2"
+INSTALLER_VERSION="v3.1"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 INSTALLER_NAME="$STNAME Installer"
 # For security reasons, Developer Mode has to be disabled automatically
@@ -28,13 +28,17 @@ INSTALLER_DEVELOPER_MODE=false
 INSTALLER_NEEDED_REQUIREMENTS="python-lxml python-bs4 python-gi python-gi-cairo"
 # The system's Package Manager
 # This is a dummy value and will make errors if not refreshed, so use detect_package_mgr later!
-INSTALLER_PACKAGE_MANAGER=unknown
+PACKAGE_MANAGER=unknown
+# The Operating System
+# This is a dummy value and will make errors if not refreshed, so use detect_OS later!
+OS=unknown
+DISTRIBUTION=unknown
 ####
 #### Ends Startup task.
 ####
-#### Starts Function definition.
+#### Starts definition.
 ####
-function info_license {
+info_license() {
   # Prints license
   if [ "$1" != "--no-warning" ]; then
     echo "!!!! WE DO NOT RECOMMEND VIEWING LICENSE IN HERE !!!!"
@@ -44,7 +48,18 @@ function info_license {
   cat $BDWC_LICENSE
 }
 
-function info_readme {
+info_opensource_license() {
+  # Prints open source licenses
+  echo ""
+  echo "#### $INSTALLER_FULL_NAME includes some work from the following open source projects: ####"
+  echo ""
+  echo "[neofetch]"
+  echo "https://github.com/dylanaraps/neofetch"
+  echo ""
+  cat "$PWD/bin/opensource-licenses/neofetch/LICENSE.md"
+}
+
+info_readme() {
   # Prints readme
   echo "!!!! WE DO NOT RECOMMEND VIEWING README IN HERE !!!!"
   echo "!!!! PLEASE VIEW FROM THE GITHUB WEBSITE INSTEAD !!!!"
@@ -52,7 +67,7 @@ function info_readme {
   cat $BDWC_README
 }
 
-function info_main {
+info_main() {
   # Prints main information
   echo ""
   echo "$UPNAME"
@@ -64,20 +79,21 @@ function info_main {
   echo ""
 }
 
-function info_help {
+info_help() {
   # Prints help about installer and tasks
   echo "Usage: installer.sh [OPTION]..."
   echo "       installer.sh [OPTION=*]..."
   echo ""
-  echo " --help              displays help about the Installer and tasks"
-  echo " --version           displays the Installer version"
-  echo " --license           displays LICENSE"
-  echo " --readme            displays README.md"
-  echo " --detect-install    detects previous $UPNAME installation"
-  echo " --install           installs $UPNAME"
-  echo " --uninstall         uninstalls $UPNAME"
-  echo " --update            updates $UPNAME (needs git)"
-  echo " --execute           runs $UPNAME"
+  echo " --help                display help about the Installer and tasks"
+  echo " --version             display the Installer version"
+  echo " --license             display LICENSE"
+  echo " --opensource-license  print Open Source Licenses"
+  echo " --readme              display README.md"
+  echo " --detect              detect previous $UPNAME installation"
+  echo " --install             install $UPNAME"
+  echo " --uninstall           uninstall $UPNAME"
+  echo " --update              update $UPNAME (needs git)"
+  echo " --execute             run $UPNAME"
   echo ""
   echo " For developers:"
   echo " --enable-devmode    enables Developer Mode"
@@ -85,7 +101,7 @@ function info_help {
   echo " --run-installer-command=*    runs internal functions or shell commands"
   echo ""
   echo " Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),"
-  echo " those who wish to run developer tasks will always have to put --enable-devmode in front of OPTION."
+  echo " thOSe who wish to run developer tasks will always have to put --enable-devmode in front of OPTION."
   echo " For example, installer.sh --enable-devmode [DEVELOPER_OPTION/TASKS]"
   echo ""
   echo " To directly run internal functions or shell commands, first you need to enable Developer Mode and use --run-installer-command."
@@ -97,7 +113,7 @@ function info_help {
   echo " And you know what? #This_Installer_can_moo (Try to find the Easter Egg!)"
 }
 
-function info_version {
+info_version() {
   # Prints version info
   echo "$INSTALLER_FULL_NAME"
   echo "Installer Copyright (C) 2017~  NKS (nks15)"
@@ -106,20 +122,20 @@ function info_version {
   info_license --no-warning
 }
 
-function info_alert {
+info_alert() {
   # Prints alerts
   echo "Installer: $1!"
   echo "Try 'installer.sh $2' $3."
 }
 
-function info_error {
+info_error() {
   # Prints errors and exit
   echo ""
   echo "Installer: Error $1!"
   exit 0
 }
 
-function info_finish {
+info_finish() {
   # Prints finish text
   echo ""
   echo ""
@@ -127,15 +143,210 @@ function info_finish {
   echo ""
 }
 
-function info_install {
+info_install() {
   # Prints install text
   echo ""
   echo "Installing..."
   echo ""
 }
 
-function uninstall_main {
-  # Completely removes/uninstalles Bing-Desktop-Wallpaper-Changer in this host system
+detect_os() {
+  # Code: https://github.com/dylanaraps/neofetch
+  # The MIT License (MIT)
+  #
+  # Copyright (c) 2016-2017 Dylan Araps
+  #
+  # Permission is hereby granted, free of charge, to any person obtaining a copy
+  # of this software and associated documentation files (the "Software"), to deal
+  # in the Software without restriction, including without limitation the rights
+  # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  # copies of the Software, and to permit persons to whom the Software is
+  # furnished to do so, subject to the following conditions:
+  #
+  # The above copyright notice and this permission notice shall be included in all
+  # copies or substantial portions of the Software.
+  #
+  # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  # ITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  # SOFTWARE.
+  kernel_name=$(uname -s)
+
+  case "$kernel_name" in
+        "Linux" | "GNU"*) OS="Linux" ;;
+        "Darwin") OS="$(sw_vers -productName)" ;;
+        *"BSD" | "DragonFly" | "Bitrig") OS="BSD" ;;
+        "CYGWIN"* | "MSYS"* | "MINGW"*) OS="Windows" ;;
+        "SunOS") OS="Solaris" ;;
+        "Haiku") OS="Haiku" ;;
+        "MINIX") OS="MINIX" ;;
+        "AIX") OS="AIX" ;;
+        "IRIX64") OS="IRIX" ;;
+        *)
+            printf "%s\n" "Unknown OS detected: '$kernel_name', aborting..." >&2
+            printf "%s\n" "Open an issue on GitHub to add support for your OS." >&2
+            exit 1
+        ;;
+  esac
+
+
+  [[ "$DISTRIBUTION" ]] && return
+
+  case "$OS" in
+      "Linux" | "BSD" | "MINIX")
+          if [[ "$(< /proc/version)" == *"MicrOSoft"* ||
+              "$kernel_version" == *"MicrOSoft"* ]]; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on")   DISTRIBUTION="$(lsb_release -sir) [Windows 10]" ;;
+                  "tiny") DISTRIBUTION="Windows 10" ;;
+                  *)      DISTRIBUTION="$(lsb_release -sd) on Windows 10" ;;
+              esac
+
+          elif [[ "$(< /proc/version)" == *"chrome-bot"* || -f "/dev/crOS_ec" ]]; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on")   DISTRIBUTION="$(lsb_release -sir) [Chrome OS]" ;;
+                  "tiny") DISTRIBUTION="Chrome OS" ;;
+                   *)      DISTRIBUTION="$(lsb_release -sd) on Chrome OS" ;;
+              esac
+
+          elif [[ -f "/etc/redstar-release" ]]; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on" | "tiny") DISTRIBUTION="Red Star OS" ;;
+                  *) DISTRIBUTION="Red Star OS $(awk -F'[^0-9*]' '$0=$2' /etc/redstar-release)"
+              esac
+
+          elif [[ -f "/etc/siduction-version" ]]; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on" | "tiny") DISTRIBUTION="Siduction" ;;
+                  *) DISTRIBUTION="Siduction ($(lsb_release -sic))"
+              esac
+
+          elif type -p lsb_release >/dev/null; then
+                case "$DISTRIBUTION_shorthand" in
+                    "on")   lsb_flags="-sir" ;;
+                    "tiny") lsb_flags="-si" ;;
+                    *)      lsb_flags="-sd" ;;
+                esac
+                DISTRIBUTION="$(lsb_release $lsb_flags)"
+
+          elif [[ -f "/etc/GoboLinuxVersion" ]]; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on" | "tiny") DISTRIBUTION="GoboLinux" ;;
+                  *) DISTRIBUTION="GoboLinux $(< /etc/GoboLinuxVersion)"
+              esac
+
+          elif type -p guix >/dev/null; then
+              case "$DISTRIBUTION_shorthand" in
+                  "on" | "tiny") DISTRIBUTION="GuixSD" ;;
+                  *) DISTRIBUTION="GuixSD $(guix system -V | awk 'NR==1{printf $5}')"
+              esac
+
+          elif type -p crux >/dev/null; then
+              DISTRIBUTION="$(crux)"
+              case "$DISTRIBUTION_shorthand" in
+                  "on")   DISTRIBUTION="${DISTRIBUTION//version}" ;;
+                  "tiny") DISTRIBUTION="${DISTRIBUTION//version*}" ;;
+              esac
+
+          elif type -p tazpkg >/dev/null; then
+              DISTRIBUTION="SliTaz $(< /etc/slitaz-release)"
+
+          elif type -p kpt >/dev/null && \
+               type -p kpm >/dev/null; then
+              DISTRIBUTION="KSLinux"
+
+          elif [[ -d "/system/app/" && -d "/system/priv-app" ]]; then
+              DISTRIBUTION="Android $(getprop ro.build.version.release)"
+
+          elif [[ -f "/etc/OS-release" || -f "/usr/lib/OS-release" ]]; then
+              files=("/etc/OS-release" "/usr/lib/OS-release")
+
+              # Source the OS-release file
+              for file in "${files[@]}"; do
+                  source "$file" && break
+              done
+
+              # Format the DISTRIBUTION name.
+              case "$DISTRIBUTION_shorthand" in
+                  "on") DISTRIBUTION="${NAME:-${DISTRIB_ID}} ${VERSION_ID:-${DISTRIB_RELEASE}}" ;;
+                  "tiny") DISTRIBUTION="${NAME:-${DISTRIB_ID:-${TAILS_PRODUCT_NAME}}}" ;;
+                  "off") DISTRIBUTION="${PRETTY_NAME:-${DISTRIB_DESCRIPTION}} ${UBUNTU_CODENAME}" ;;
+              esac
+
+              # Workarounds for DISTRIBUTIONs that go against the OS-release standard.
+              [[ -z "${DISTRIBUTION// }" ]] && DISTRIBUTION="$(awk '/BLAG/ {print $1; exit}')" "${files[@]}"
+              [[ -z "${DISTRIBUTION// }" ]] && DISTRIBUTION="$(awk -F'=' '{print $2; exit}')"  "${files[@]}"
+
+          else
+              for release_file in /etc/*-release; do
+                  DISTRIBUTION+="$(< "$release_file")"
+              done
+
+              if [[ -z "$DISTRIBUTION" ]]; then
+                  case "$DISTRIBUTION_shorthand" in
+                      "on" | "tiny") DISTRIBUTION="$kernel_name" ;;
+                      *) DISTRIBUTION="$kernel_name $kernel_version" ;;
+                  esac
+                  DISTRIBUTION="${DISTRIBUTION/DragonFly/DragonFlyBSD}"
+
+                  # Workarounds for FreeBSD based DISTRIBUTIONs.
+                  [[ -f "/etc/pcbsd-lang" ]] && DISTRIBUTION="PCBSD"
+                  [[ -f "/etc/trueOS-lang" ]] && DISTRIBUTION="TrueOS"
+
+                  # /etc/pacbsd-release is an empty file
+                  [[ -f "/etc/pacbsd-release" ]] && DISTRIBUTION="PacBSD"
+              fi
+          fi
+          DISTRIBUTION="$(trim_quotes "$DISTRIBUTION")"
+          DISTRIBUTION="${DISTRIBUTION/'NAME='}"
+      ;;
+    esac
+
+    # Get OS architecture.
+    case "$OS" in
+        "Solaris" | "AIX" | "Haiku" | "IRIX") machine_arch="$(uname -p)" ;;
+        *) machine_arch="$(uname -m)" ;;
+
+    esac
+    if [[ "$OS_arch" == "on" ]]; then
+        DISTRIBUTION+=" ${machine_arch}"
+    fi
+
+    [[ "${ASCII_DISTRIBUTION:-auto}" == "auto" ]] && \
+    ASCII_DISTRIBUTION="$(trim "$DISTRIBUTION")"
+}
+
+detect_package_mgr() {
+  # Detect the system's package manager
+  if [ "$1" == "--verbOSe" ]; then
+    echo "Detecting package manager..."
+  fi
+
+  if [ $(which apt-get) != "" ]; then
+    PACKAGE_MANAGER=apt-get
+  else
+    if [ $(which rpm) != "" ]; then
+      PACKAGE_MANAGER=rpm
+    else
+      if [ $(which pip) != "" ]; then
+        PACKAGE_MANAGER=pip
+      else
+        PACKAGE_MANAGER=unknown
+      fi
+    fi
+  fi
+
+  if [ "$1" == "--verbOSe" ]; then
+    echo ""
+    echo "Package manager: $PACKAGE_MANAGER"
+  fi
+}
+
+uninstall_main() {
+  # Completely removes/uninstalles Bing-Desktop-Wallpaper-Changer in this hOSt system
   if [ "$1" != "--no-echo-text" ]; then
     echo "Completely removing Bing-Desktop-Wallpaper-Changer in $HOSTNAME..."
   fi
@@ -145,7 +356,7 @@ function uninstall_main {
   sudo rm -v $AUTOSTART/bing-desktop-wallpaper-changer.desktop
 }
 
-function update_main {
+update_main() {
   # Updates local BDWC using git
   # method used: https://help.github.com/articles/syncing-a-fork/
   #
@@ -155,7 +366,7 @@ function update_main {
   git remote add upstream https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer.git
   echo " Added remote:"
   git remote -v
-  echo " Fetching upstream repository..."
+  echo " Fetching upstream repOSitory..."
   git fetch upstream
   echo " Checkout local master branch..."
   git checkout master
@@ -166,33 +377,7 @@ function update_main {
   echo "Now you can use 'installer.sh --install' to finish installing to $HOSTNAME"
 }
 
-function detect_package_mgr {
-  # Detect the system's package manager
-  if [ "$1" == "--verbose" ]; then
-    echo "Detecting package manager..."
-  fi
-
-  if [ $(which apt-get) != "" ]; then
-    INSTALLER_PACKAGE_MANAGER=apt-get
-  else
-    if [ $(which rpm) != "" ]; then
-      INSTALLER_PACKAGE_MANAGER=rpm
-    else
-      if [ $(which pip) != "" ]; then
-        INSTALLER_PACKAGE_MANAGER=pip
-      else
-        INSTALLER_PACKAGE_MANAGER=unknown
-      fi
-    fi
-  fi
-
-  if [ "$1" == "--verbose" ]; then
-    echo ""
-    echo "Package manager: $INSTALLER_PACKAGE_MANAGER"
-  fi
-}
-
-function detect_previous_install {
+detect_previous_install() {
   # Detect previous Bing-Desktop-Wallpaper-Changer installation
   echo "Detecting previous installation..."
   INSTALLER_IS_BDWC_INSTALLED_IN_A=$(ls $HOME | grep -i $NAME)
@@ -220,7 +405,7 @@ function detect_previous_install {
   fi
 }
 
-function find_error {
+find_error() {
   # Find errors and alerts them
   if [ "$(ls | grep LICENSE)" == "" ]; then
     info_error "1 (License file not found)"
@@ -230,16 +415,16 @@ function find_error {
     info_error "2 (Binary folder not found)"
   fi
 
-  if [ $INSTALLER_PACKAGE_MANAGER == unknown ]; then
+  if [ $PACKAGE_MANAGER == unknown ]; then
     info_error "3 (Unknown package manager. Please report to GitHub!)"
   fi
 }
 
-function easter_egg {
+easter_egg() {
   # Easter Egg!
   # Any new ideas is welcome
   # * "fortune | cowsay" looks good too
-  if [ "$INSTALLER_PACKAGE_MANAGER" == apt-get ]; then
+  if [ "$PACKAGE_MANAGER" == apt-get ]; then
     apt-get moo
   else
     echo "Moooooooooooooo"
@@ -247,7 +432,7 @@ function easter_egg {
   fi
 }
 
-function ask_sudo {
+ask_sudo() {
   # Asks user to grant Superuser permission
   echo "Asking sudo privilege..."
   echo " $INSTALLER_NAME needs Superuser permissions to continue and run this task."
@@ -265,7 +450,7 @@ function ask_sudo {
   fi
 }
 
-function ask_config {
+ask_config() {
   echo "Asking configuration data..."
   echo ""
 
@@ -293,7 +478,7 @@ function ask_config {
   fi
 
   echo ""
-  echo "Should $NAME needs to autostart when you log in? (Add in Startup Application)"
+  echo "Should $NAME needs to autOStart when you log in? (Add in Startup Application)"
   echo -n "  Add in Startup Application (y/n)? : "
   read answer
   if echo "$answer" | grep -iq "^y" ;then
@@ -311,14 +496,14 @@ function ask_config {
   # TODO : Add a lot of options
 }
 
-function install_packages {
+install_packages() {
   echo ""
   echo "In order to prevent errors and run $UPNAME, we need to install some packages."
-  echo " Using $INSTALLER_PACKAGE_MANAGER to install..."
-  sudo $INSTALLER_PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS
+  echo " Using $PACKAGE_MANAGER to install..."
+  sudo $PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS
 }
 
-function install_system {
+install_system() {
   echo ""
   echo "Installing in $INSTALLPATH..."
 
@@ -333,7 +518,7 @@ function install_system {
   sudo mv -vf $INSTALLPATH/bin/main.py $INSTALLPATH/main.py
 }
 
-function install_symlink {
+install_symlink() {
   if [ $PYSYMLINK == true ]; then
       echo ""
       echo "Creating symlink for easy execution..."
@@ -343,7 +528,7 @@ function install_symlink {
   fi
 }
 
-function install_add_startup {
+install_add_startup() {
   if [ $STARTUP == true ]; then
       echo ""
       echo "Adding $NAME in Startup Application..."
@@ -359,20 +544,20 @@ function install_add_startup {
   fi
 }
 
-function install_set_icon {
+install_set_icon() {
   echo ""
   echo "Setting icons..."
   sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
 }
 
-function install_set_python_script {
+install_set_python_script() {
   echo ""
   echo "Setting scripts..."
   sudo sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
   sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Replaced to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
 
-function install_remove_unneeded {
+install_remove_unneeded() {
   # Clean up the locally installed BDWC
   echo ""
   echo "Removing unneeded things..."
@@ -381,7 +566,7 @@ function install_remove_unneeded {
   sudo rm -v $INSTALLPATH/.gitignore
 }
 
-function execute {
+execute() {
   echo ""
   echo "Executing $NAME..."
   if [ $PYSYMLINK == true ]; then
@@ -391,7 +576,7 @@ function execute {
   fi
 }
 
-function install_main {
+install_main() {
   ask_sudo
   echo ""
   detect_previous_install --remove-detected
@@ -409,22 +594,23 @@ function install_main {
   info_finish
 }
 ####
-#### Ends Function definition.
+#### Ends definition.
 ####
 #### Starts normal tasks.
 ####
 # Prints main info
 info_main
 
-# Detect package manager
-#  Package manager detection is here (and not in install_main)
+# Detects package manager and operating system
+#  Environment detection is here (and not in install_main)
 #  because many tasks rely on this (like Easter Egg)
+detect_os
 detect_package_mgr
 
 # Try to find errors
 find_error
 
-# Check if arguments is smaller then 1
+# Check if argument is smaller then 1
 if [ "$#" -lt 1 ]; then
   info_alert "no tasks to do" "--help" "for more information"
   exit 0
@@ -446,11 +632,15 @@ case $i in
     info_license
     shift
     ;;
+    --opensource-license)
+    info_opensource_license
+    shift
+    ;;
     --readme)
     info_readme
     shift
     ;;
-    --detect-install)
+    --detect)
     detect_previous_install
     shift
     ;;
@@ -485,7 +675,7 @@ case $i in
     --run-installer-command=*)
     FUNCTION_NAME="${i#*=}"
     if [ $INSTALLER_DEVELOPER_MODE == true ]; then
-      echo "- Hello, Developer $USER on Host $HOSTNAME -"
+      echo "- Hello, Developer $USER on HOSt $HOSTNAME -"
       echo "INSTALLER_DEVELOPER_MODE = $INSTALLER_DEVELOPER_MODE"
       echo "FUNCTION_NAME (COMMAND) = $FUNCTION_NAME"
       echo ""
