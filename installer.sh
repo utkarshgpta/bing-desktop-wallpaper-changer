@@ -18,7 +18,7 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3.3-release"
+INSTALLER_VERSION="v3.3.1-release"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 INSTALLER_NAME="$STNAME Installer"
 INSTALLER_ICONS="$(ls $PWD/icon | sed 's/.svg//g' | sed -n -e '$!H;${H;g;s/\n/ /gp;}') None"
@@ -301,13 +301,14 @@ ask_sudo() {
 }
 
 ask_config() {
+  echo ""
   echo "Asking configuration data..."
   echo ""
   echo ""
 
   # Installation path
   echo "Where do you want to install $UPNAME?"
-  echo " * Entering 'opt' or pressing Enter key or leaving this blank will install in /opt/$NAME"
+  echo " * Entering 'opt' or pressing Enter or leaving this blank will install in /opt/$NAME (recommended)"
   echo " * Entering 'home' will install in $HOME/$NAME"
   echo -n "  Install $UPNAME in (opt/home)? : "
   read answer
@@ -391,8 +392,14 @@ ask_config() {
 install_packages() {
   echo ""
   echo "In order to prevent errors and run $UPNAME, we need to install some packages."
-  echo " Using $PACKAGE_MANAGER to install..."
-  sudo $PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS
+  echo "Using $PACKAGE_MANAGER to install..."
+  echo ""
+
+  if [ $PACKAGE_MANAGER == apt-get ]; then
+    sudo $PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS -y
+  else
+    sudo $PACKAGE_MANAGER install $INSTALLER_NEEDED_REQUIREMENTS
+  fi
 }
 
 install_system() {
@@ -475,7 +482,7 @@ install_set_python_script() {
   echo ""
   echo "Setting scripts..."
   sudo sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
-  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Path setup to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
+  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|setup done to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
 
 install_remove_unneeded() {
@@ -569,6 +576,7 @@ case $i in
     ;;
     --uninstall)
     ask_sudo
+    echo ""
     uninstall_main
     shift
     ;;
