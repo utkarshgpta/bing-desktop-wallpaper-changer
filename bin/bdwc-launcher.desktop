@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Version=1.0
+Terminal=false
+Name=Bing Desktop Wallpaper Changer
+GenericName=Bing-Desktop-Wallpaper-Changer
+Comment=Automatically changes desktop wallpaper!
+Exec=/dev/null
+Icon=/dev/null

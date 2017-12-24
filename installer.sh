@@ -147,7 +147,8 @@ uninstall_main() {
   sudo rm -rfv $HOME/$NAME
   sudo rm -rfv /opt/$NAME
   sudo rm -v $LINKTO/$TERMNAME
-  sudo rm -v $AUTOSTART/bing-desktop-wallpaper-changer.desktop
+  sudo rm -v $AUTOSTART/bdwc-autostart.desktop
+  sudo rm -v /usr/share/applications/bdwc-launcher.desktop
 }
 
 update_main() {
@@ -383,25 +384,6 @@ ask_config() {
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     info_error "33-2 (Mistyped or incorrect Icon value. Please check what you have typed...)"
   fi
-
-  exit 0
-
-  echo "If you do so, you can launch and execute $NAME very easily by clicking the desktop icon (like Firefox or System Settings)."
-  echo -n "  Create desktop launcher for easy execution, e.g. on the Desktop (y/n)? : "
-  read answer
-  if echo "$answer" | grep -iq "^y" ;then
-      DESKTOP=true
-  else
-      DESKTOP=false
-  fi
-
-  if [ "$(lsb_release -i | grep Ubuntu)" != "" ]; then
-      ICON=Ubuntu
-  else
-      ICON=Bing
-  fi
-
-  # TODO : Add a lot of options
 }
 
 install_packages() {
@@ -426,6 +408,32 @@ install_system() {
   sudo mv -vf $INSTALLPATH/bin/main.py $INSTALLPATH/main.py
 }
 
+install_set_files() {
+  if [ $PYSYMLINK == true ]; then
+    sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
+    sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
+  else
+	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
+	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
+  fi
+}
+
+install_set_icon() {
+  echo ""
+  echo "Setting icons..."
+
+  if [ "$ICON" == "None" ]; then
+    echo "Icon set as $ICON"
+    sudo sed -i "s|app_notification = Notify.Notification.new(summary, str(body), icon)|app_notification = Notify.Notification.new(summary, str(body))|g" "$INSTALLPATH/main.py"
+    sudo sed -i "s|Icon=/dev/null||g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
+    sudo sed -i "s|Icon=/dev/null||g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
+  else
+    sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
+    sudo sed -i "s|Icon=/dev/null|Icon=$INSTALLPATH/icon.svg|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
+    sudo sed -i "s|Icon=/dev/null|Icon=$INSTALLPATH/icon.svg|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
+  fi
+}
+
 install_symlink() {
   if [ $PYSYMLINK == true ]; then
       echo ""
@@ -436,33 +444,31 @@ install_symlink() {
   fi
 }
 
+install_add_desktop_launcher() {
+  if [ $DESKTOP == true ]; then
+      echo ""
+      echo "Adding $NAME Desktop Launcher..."
+
+      sudo mv -vf $INSTALLPATH/bin/bdwc-launcher.desktop /usr/share/applications/bdwc-launcher.desktop
+      sudo chmod +x /usr/share/applications/bdwc-launcher.desktop
+  fi
+}
+
 install_add_startup() {
   if [ $STARTUP == true ]; then
       echo ""
       echo "Adding $NAME in Startup Application..."
 
-      if [ $PYSYMLINK == true ]; then
-  	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
-      else
-	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop"
-      fi
-
       sudo mkdir -pv $AUTOSTART
-      sudo cp -vf $INSTALLPATH/bin/bing-desktop-wallpaper-changer.desktop $AUTOSTART/bing-desktop-wallpaper-changer.desktop
+      sudo cp -vf $INSTALLPATH/bin/bdwc-autostart.desktop $AUTOSTART/bdwc-autostart.desktop
   fi
-}
-
-install_set_icon() {
-  echo ""
-  echo "Setting icons..."
-  sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
 }
 
 install_set_python_script() {
   echo ""
   echo "Setting scripts..."
   sudo sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
-  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Replaced to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
+  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Path set up to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
 
 install_remove_unneeded() {
@@ -485,17 +491,19 @@ execute() {
 }
 
 install_main() {
-  #ask_sudo
+  ask_sudo
   echo ""
-  #detect_previous_install --remove-detected
+  detect_previous_install --remove-detected
   echo ""
   ask_config
   info_install
   install_packages
   install_system
-  install_symlink
-  install_add_startup
+  install_set_files
   install_set_icon
+  install_symlink
+  install_add_desktop_launcher
+  install_add_startup
   install_set_python_script
   install_remove_unneeded
   execute
