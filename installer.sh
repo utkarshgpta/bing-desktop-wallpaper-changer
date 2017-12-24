@@ -2,7 +2,7 @@
 # INFO: Please use Bash to run this Installer
 #
 # Bing-Desktop-Wallpaper-Changer
-# BDWC Installer Copyright (C) 2017~  NKS (nks15)
+# BDWC Installer Copyright (C) 2017~ NKS (nks15)
 #
 #### Starts Startup task.
 #### INFO: DO NOT EDIT!
@@ -18,7 +18,7 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3.2"
+INSTALLER_VERSION="v3.3-release"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 INSTALLER_NAME="$STNAME Installer"
 INSTALLER_ICONS="$(ls $PWD/icon | sed 's/.svg//g' | sed -n -e '$!H;${H;g;s/\n/ /gp;}') None"
@@ -148,6 +148,7 @@ uninstall_main() {
   sudo rm -rfv /opt/$NAME
   sudo rm -v $LINKTO/$TERMNAME
   sudo rm -v $AUTOSTART/bdwc-autostart.desktop
+  sudo rm -v $AUTOSTART/bing-desktop-wallpaper-changer.desktop
   sudo rm -v /usr/share/applications/bdwc-launcher.desktop
 }
 
@@ -283,9 +284,9 @@ easter_egg() {
 
 ask_sudo() {
   # Asks user to grant Superuser permission
-  echo "Asking sudo privilege..."
+  echo "Asking root(sudo) privilege..."
   echo " $INSTALLER_NAME needs Superuser permissions to continue and run this task."
-  echo " We will never use Superuser permissions to do bad things!"
+  echo " Don't worry! I will never use Superuser permissions to do bad things!"
   echo ""
   
   # Check if root permission is granted
@@ -359,15 +360,16 @@ ask_config() {
   else
     echo "Choose the icon for the Notification..."
   fi
-
-  echo " * Currently available icons:$INSTALLER_ICONS"
+  echo " * Operating System: $OS | Linux Distribution: $DISTRIBUTION *"
   echo ""
-  echo " *** PLEASE DO NOT PRESS ENTER or INPUT ANY UNNEEDED WORDS! ***"
-  echo " *** Please input the item you want in the exact form listed above. (Case sensitive!) ***"
-  echo " *** e.g. type *Bing* if you want Bing icon or *None* to remove icon. ***"
+  echo " %% Available Icons:$INSTALLER_ICONS %%"
+  echo ""
+  echo " ## PLEASE DO NOT PRESS ENTER or INPUT ANY UNNEEDED WORDS! ##"
+  echo " ## Please input the item you want in the exact form listed at (above) Available Icons. (Case sensitive!) ##"
+  echo " ## e.g. type *Bing* if you want Bing icon (recommended) or *None* to remove icon. ##"
   echo ""
 
-  echo -n "  Choose one Icon : "
+  echo -n "  Choose a Icon : "
   read answer
   ICON=$answer
 
@@ -409,6 +411,9 @@ install_system() {
 }
 
 install_set_files() {
+  echo ""
+  echo "Setting desktop files..."
+
   if [ $PYSYMLINK == true ]; then
     sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
     sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$LINKTO/$TERMNAME|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
@@ -416,6 +421,8 @@ install_set_files() {
 	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
 	sudo sed -i "s|Exec=[/a-z/a-z]*|Exec=$INSTALLPATH/main.py|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
   fi
+
+  echo "File setup done."
 }
 
 install_set_icon() {
@@ -428,7 +435,7 @@ install_set_icon() {
     sudo sed -i "s|Icon=/dev/null||g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
     sudo sed -i "s|Icon=/dev/null||g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
   else
-    sudo cp -vf $INSTALLPATH/bin/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
+    sudo cp -vf $INSTALLPATH/icon/$ICON.svg $INSTALLPATH/icon.svg && echo "Icon set as $ICON."
     sudo sed -i "s|Icon=/dev/null|Icon=$INSTALLPATH/icon.svg|g" "$INSTALLPATH/bin/bdwc-launcher.desktop"
     sudo sed -i "s|Icon=/dev/null|Icon=$INSTALLPATH/icon.svg|g" "$INSTALLPATH/bin/bdwc-autostart.desktop"
   fi
@@ -468,7 +475,7 @@ install_set_python_script() {
   echo ""
   echo "Setting scripts..."
   sudo sed -i "s|/path/to/bing-desktop-wallpaper-changer|$INSTALLPATH|g" "$INSTALLPATH/main.py"
-  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Path set up to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
+  sudo sed -i "s|replace with the actual path to the bing-desktop-wallpaper-changer folder|Path setup to $INSTALLPATH by $INSTALLER_FULL_NAME|g" "$INSTALLPATH/main.py"
 }
 
 install_remove_unneeded() {
@@ -605,3 +612,4 @@ done
 #### Ends normal tasks;
 #
 # BDWC Installer :)
+#

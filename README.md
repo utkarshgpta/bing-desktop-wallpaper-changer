@@ -74,32 +74,32 @@ All Usages & Arguments is listed below.
 Usage: installer.sh [OPTION]...
        installer.sh [OPTION=*]...
 
- --help              displays help about the Installer and tasks
- --version           displays the Installer version
- --license           displays LICENSE
- --readme            displays README.md
- --detect-install    detects previous Bing-Desktop-Wallpaper-Changer installation
- --install           installs Bing-Desktop-Wallpaper-Changer
- --uninstall         uninstalls Bing-Desktop-Wallpaper-Changer
- --update            updates Bing-Desktop-Wallpaper-Changer (needs git)
- --execute           runs Bing-Desktop-Wallpaper-Changer
+ --help                display help about the Installer and tasks
+ --version             display the Installer version
+ --license             display LICENSE
+ --readme              display README.md
+ --detect              detect previous Bing-Desktop-Wallpaper-Changer installation
+ --install             install Bing-Desktop-Wallpaper-Changer
+ --uninstall           uninstall Bing-Desktop-Wallpaper-Changer
+ --update              update Bing-Desktop-Wallpaper-Changer (needs git)
+ --execute             run Bing-Desktop-Wallpaper-Changer
 
  For developers:
  --enable-devmode    enables Developer Mode
  --disable-devmode   disables Developer Mode
  --run-installer-command=*    runs internal functions or shell commands
 
- Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),
+ * Note that Developer Mode is disabled automatically when the Installer starts (because of security reasons),
  those who wish to run developer tasks will always have to put --enable-devmode in front of OPTION.
  For example, installer.sh --enable-devmode [DEVELOPER_OPTION/TASKS]
 
- To directly run internal functions or shell commands, first you need to enable Developer Mode and use --run-installer-command.
+ * To directly run internal functions or shell commands, first you need to enable Developer Mode and use --run-installer-command.
  For example, installer.sh --enable-devmode --run-installer-command=[YOUR COMMAND]
 
- For more information, please visit:
+ * For more information, please visit:
  GitHub: <https://github.com/UtkarshGpta/bing-desktop-wallpaper-changer>
 
- And you know what? #This_Installer_can_moo (Try to find the Easter Egg!)
+ * And you know what? #This_Installer_can_moo (Try to find the Easter Egg!)
 ```
 
 P.S. The Installer has a easter egg! (Any new easter egg ideas is welcome) Try:
