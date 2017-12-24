@@ -18,9 +18,10 @@ AUTOSTART=$HOME/.config/autostart
 BDWC_LICENSE=$PWD/LICENSE
 BDWC_README=$PWD/README.md
 ## BDWC Installer variable definition
-INSTALLER_VERSION="v3.1"
+INSTALLER_VERSION="v3.2"
 INSTALLER_FULL_NAME="$STNAME Installer $INSTALLER_VERSION"
 INSTALLER_NAME="$STNAME Installer"
+INSTALLER_ICONS="$(ls $PWD/icon | sed 's/.svg//g' | sed -n -e '$!H;${H;g;s/\n/ /gp;}') None"
 # For security reasons, Developer Mode has to be disabled automatically
 INSTALLER_DEVELOPER_MODE=false
 # Required to be installed in order to run main.py
@@ -300,10 +301,12 @@ ask_sudo() {
 ask_config() {
   echo "Asking configuration data..."
   echo ""
+  echo ""
 
+  # Installation path
   echo "Where do you want to install $UPNAME?"
-  echo "   Entering 'opt' or leaving input blank will install in /opt/$NAME"
-  echo "   Entering 'home' will install in $HOME/$NAME"
+  echo " * Entering 'opt' or pressing Enter key or leaving this blank will install in /opt/$NAME"
+  echo " * Entering 'home' will install in $HOME/$NAME"
   echo -n "  Install $UPNAME in (opt/home)? : "
   read answer
   if echo "$answer" | grep -iq "^home" ;then
@@ -314,8 +317,9 @@ ask_config() {
       INSTALLPATH_SMALL=/opt
   fi
 
+  # Symlink
   echo ""
-  echo "Should we create $NAME symlink to $LINKTO/$TERMNAME so you could easily execute it?"
+  echo "Should I create $NAME symlink to $LINKTO/$TERMNAME so you could easily execute it?"
   echo -n "  Create symlink for easy execution, e.g. in Terminal (y/n)? : "
   read answer
   if echo "$answer" | grep -iq "^y" ;then
@@ -324,6 +328,19 @@ ask_config() {
       PYSYMLINK=false
   fi
 
+  # Desktop launcher
+  echo ""
+  echo "Should I create $NAME desktop launcher to the Application List/Dock/Panel/Menu/etc?"
+  echo "If you do so, you can launch and execute $NAME very easily by clicking the desktop icon (like Firefox or System Settings)."
+  echo -n "  Create desktop launcher for easy execution, e.g. on the Desktop (y/n)? : "
+  read answer
+  if echo "$answer" | grep -iq "^y" ;then
+      DESKTOP=true
+  else
+      DESKTOP=false
+  fi
+
+  # Login autostart
   echo ""
   echo "Should $NAME needs to autostart when you log in? (Add in Startup Application)"
   echo -n "  Add in Startup Application (y/n)? : "
@@ -332,6 +349,50 @@ ask_config() {
       STARTUP=true
   else
       STARTUP=false
+  fi
+
+  # Icon
+  echo ""
+  if [ $DESKTOP == true ]; then
+    echo "Choose the icon for the Notification and the Desktop launcher..."
+  else
+    echo "Choose the icon for the Notification..."
+  fi
+
+  echo " * Currently available icons:$INSTALLER_ICONS"
+  echo ""
+  echo " *** PLEASE DO NOT PRESS ENTER or INPUT ANY UNNEEDED WORDS! ***"
+  echo " *** Please input the item you want in the exact form listed above. (Case sensitive!) ***"
+  echo " *** e.g. type *Bing* if you want Bing icon or *None* to remove icon. ***"
+  echo ""
+
+  echo -n "  Choose one Icon : "
+  read answer
+  ICON=$answer
+
+  # Check ICON value to see if it's correct
+  ICON_LIST=$(echo $INSTALLER_ICONS | sed 's/ /^?$*+!4#^/g')
+  ICON_INTEGRITY=$(echo $ICON_LIST | grep "$ICON")
+
+  if [ "$ICON" == "" ]; then
+    echo ""
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    info_error "33 (Blank Icon value. Maybe you pressed the Enter key...)"
+  elif [ "$ICON_INTEGRITY" == "" ]; then
+    echo ""
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    info_error "33-2 (Mistyped or incorrect Icon value. Please check what you have typed...)"
+  fi
+
+  exit 0
+
+  echo "If you do so, you can launch and execute $NAME very easily by clicking the desktop icon (like Firefox or System Settings)."
+  echo -n "  Create desktop launcher for easy execution, e.g. on the Desktop (y/n)? : "
+  read answer
+  if echo "$answer" | grep -iq "^y" ;then
+      DESKTOP=true
+  else
+      DESKTOP=false
   fi
 
   if [ "$(lsb_release -i | grep Ubuntu)" != "" ]; then
@@ -424,9 +485,9 @@ execute() {
 }
 
 install_main() {
-  ask_sudo
+  #ask_sudo
   echo ""
-  detect_previous_install --remove-detected
+  #detect_previous_install --remove-detected
   echo ""
   ask_config
   info_install
