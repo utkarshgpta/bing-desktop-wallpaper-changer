@@ -118,3 +118,6 @@ Utkarsh Gupta and [Contributors](https://github.com/UtkarshGpta/bing-desktop-wal
 
 ## License
 [MIT license](http://opensource.org/licenses/mit-license.php).
+
+## Note
+If you're on GNOME, you can use this [extension](https://extensions.gnome.org/extension/1262/bing-wallpaper-changer/) by [neffo](https://github.com/neffo) which makes use of this script. I am using it myself. Peace :D
