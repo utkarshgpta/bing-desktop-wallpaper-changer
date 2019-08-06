@@ -364,6 +364,9 @@ def check_limit():
         size = size - files[0][1]
         del files[0]
 
+#!Silent-Ash +2: encode UTF-8 string for system calls
+def _(src):
+        return src.encode("utf-8", "strict")
 
 def main():
     """
@@ -384,6 +387,10 @@ def main():
         
         if not os.path.isfile(image_path):
             urlretrieve(image_url, image_path)
+
+#!Silent-Ash +1: incompatible desktop manager (ex. Mate) can be pointed to the single constant link named "current"
+            os.system("ln -sf " + _(image_path) + " " + _(os.path.join(download_path, "current")))
+
             try:
                 change_background_gnome(image_path)
             except:
